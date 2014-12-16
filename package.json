@@ -46,9 +46,8 @@
     "webpack-dev-server": "^1.6.5"
   },
   "dependencies": {
-    "copy-utils": "^1.0.0",
-    "functionally": "^0.6.2",
     "normalize.css": "^3.0.2",
+    "object-assign": "^2.0.0",
     "react": "^0.12.0"
   }
 }

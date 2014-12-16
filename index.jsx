@@ -7,7 +7,7 @@ var Menu  = require('./src')
 
 var items = [
     {
-        label: 'hello',
+        label: <div>hello!</div>,
         fn: function() {
             console.log('well, hello')
         }
@@ -19,8 +19,38 @@ var items = [
 
 var App = React.createClass({
 
+    handleItemClick: function() {
+        console.log('item click', arguments)
+    },
+
     render: function() {
-        return <Menu items={items} onClick={this.handleClick}/>
+        //     <Menu.Item>
+        //         <Menu.Item.Cell>hello</Menu.Item.Cell>
+        //     </Menu.Item>
+
+        //     <Menu.Item>
+        //         <Menu.Item.Cell>hi</Menu.Item.Cell>
+        //     </Menu.Item>
+        // </Menu>
+
+        return (
+            <div>
+                <Menu onClick={this.handleClick} items={items} />
+
+                <Menu>
+                    <Menu.Item onClick={this.handleItemClick}>
+                        <Menu.Item.Cell>first</Menu.Item.Cell>
+
+                    </Menu.Item>
+                    <Menu.Separator />
+                    <Menu.Item onClick={this.handleItemClick}>
+                        <Menu.Item.Cell>second</Menu.Item.Cell>
+                        <Menu.Item.Cell>icon</Menu.Item.Cell>
+                    </Menu.Item>
+                </Menu>
+            </div>
+
+        )
     },
 
     handleClick: function(item) {

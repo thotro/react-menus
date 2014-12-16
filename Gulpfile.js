@@ -6,5 +6,5 @@ gulp.task('default', function () {
         .pipe(react({
             harmony: true
         }))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest('./lib'));
 });
