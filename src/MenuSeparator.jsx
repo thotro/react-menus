@@ -12,14 +12,16 @@ module.exports = React.createClass({
     getDefaultProps: function() {
         return {
             defaultStyle: {
-            }
+                cursor: 'auto'
+            },
+            border: '1px solid gray'
         }
     },
 
     render: function() {
         var props = this.prepareProps(this.props)
 
-        return <tr {...props} />
+        return <tr {...props}><td colSpan={10}></td></tr>
     },
 
     prepareProps: function(thisProps) {
@@ -28,14 +30,25 @@ module.exports = React.createClass({
         assign(props, thisProps)
 
         props.style = this.prepareStyle(props)
+        props.className = this.prepareClassName(props)
 
         return props
+    },
+
+    prepareClassName: function(props) {
+        var className = props.className || ''
+
+        className += ' menu-separator'
+
+        return className
     },
 
     prepareStyle: function(props) {
         var style = {}
 
-        assign(style, props.defaultStyle, props.style)
+        assign(style, props.defaultStyle, {
+            borderTop: props.border
+        }, props.style)
 
         return style
     }
