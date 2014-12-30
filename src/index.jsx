@@ -64,7 +64,7 @@ var MenuClass = React.createClass({
 
         assign(props, this.props)
 
-        props.style = this.prepareStyle(props)
+        props.style     = this.prepareStyle(props)
         props.className = this.prepareClassName(props)
 
         return props
@@ -98,30 +98,32 @@ var MenuClass = React.createClass({
                 top     : offset.top || offset.y
             }
 
-            return <div style={style}
-                        onMouseOver={this.handleSubMenuOver}
-                        onMouseOut={this.handleSubMenuOut}
-                    >
-                        {menu}
-                    </div>
-        }
-    },
+            menu.props.onActivate   = this.onSubMenuActivate
+            menu.props.onInactivate = this.onSubMenuInactivate
 
-    isSubMenuVisible: function() {
-        return this.state.menu
+            return <div style={style}
+                    onMouseEnter={this.handleSubMenuMouseEnter}
+                    onMouseLeave={this.handleSubMenuMouseLeave}
+                >{menu}</div>
+        }
     },
 
     render: function() {
         var props = this.prepareProps(this.props)
 
-        var children = props.items? this.renderItems(props): this.renderChildren(props)
+        var children = props.items?
+                            this.renderItems(props):
+                            this.renderChildren(props)
 
         var menu = this.renderSubMenu(props)
 
         return (
             <div {...props}>
                 {menu}
-                <table ref="table">
+                <table ref="table"
+                    onMouseEnter={this.handleMouseEnter}
+                    onMouseLeave={this.handleMouseLeave}
+                >
                     <tbody>
                         {children}
                     </tbody>
@@ -135,9 +137,9 @@ var MenuClass = React.createClass({
     },
 
     renderChildren: function(props) {
-        var children = props.children
+        var children     = props.children
         var maxCellCount = 1
-        var menuItems = []
+        var menuItems    = []
 
         React.Children.map(children, function(item){
             var itemProps = item.props
@@ -160,8 +162,6 @@ var MenuClass = React.createClass({
 
             if (itemProps.isMenuItem){
                 i++
-                itemProps.showMenu = this.showMenu
-                itemProps.hideMenu = this.hideMenu
 
                 itemProps.onMenuItemMouseOver = this.onMenuItemMouseOver
                 itemProps.onMenuItemMouseOut  = this.onMenuItemMouseOut
@@ -184,24 +184,77 @@ var MenuClass = React.createClass({
         return menuItems
     },
 
-    onSubMenuHide: function() {
-        console.log('sub menu hide')
+    handleMouseEnter: function() {
+        this.setState({
+            mouseInside: true
+        })
+
+        this.onActivate()
     },
 
-    handleSubMenuOver: function() {
+    handleMouseLeave: function() {
         this.setState({
-            subMenuMouseOver: true
+            mouseInside: false
+        })
+
+        if (!this.state.menu && !this.state.nextMenu){
+            this.onInactivate()
+        }
+    },
+
+    onActivate: function() {
+
+        this.setState({
+            activated: true
+        })
+
+        ;(this.props.onActivate || emptyFn)()
+    },
+
+    onInactivate: function() {
+
+        if (this.state.activated){
+
+            this.setState({
+                activated: false
+            })
+
+            ;(this.props.onInactivate || emptyFn)()
+        }
+    },
+
+    //we also need mouseOverSubMenu: Boolean
+    //since when from a submenu we move back to a parent menu, we may move
+    //to a different menu item than the one that triggered the submenu
+    //so we should display another submenu
+    handleSubMenuMouseEnter: function() {
+        this.setState({
+            mouseOverSubMenu: true
         })
     },
 
-    handleSubMenuOut: function() {
+    handleSubMenuMouseLeave: function() {
+        this.setState({
+            mouseOverSubMenu: false
+        })
+    },
 
-        // debugger
+    isSubMenuActive: function() {
+        return this.state.subMenuActive
+    },
+
+    onSubMenuActivate: function() {
+        this.setState({
+            subMenuActive: true
+        })
+    },
+
+    onSubMenuInactivate: function() {
 
         var ts = +new Date()
 
         this.setState({
-            subMenuMouseOver: false,
+            subMenuActive: false,
             timestamp       : ts
         }, function(){
 
@@ -210,20 +263,19 @@ var MenuClass = React.createClass({
                     //a menu show has occured in the mean-time,
                     //so skip hiding the menu
                     if (this.state.nextMenu){
-                        this.showMenu(this.state.nextMenu, this.state.nextMenuOffset)
+                        this.setMenu(this.state.nextMenu, this.state.nextMenuOffset)
                     }
 
                     return
                 }
 
-                if (!this.state.subMenuMouseOver){
-                    this.hideMenu()
+                if (!this.isSubMenuActive()){
+                    this.setMenu()
                 }
             }.bind(this), 10)
 
         })
 
-        // }.bind(this), 10)
     },
 
     removeMouseMoveListener: function() {
@@ -231,22 +283,6 @@ var MenuClass = React.createClass({
             window.removeEventListener('mousemove', this.onWindowMouseMove)
             this.onWindowMouseMove = null
         }
-    },
-
-    showMenu: function(menu, offset) {
-
-        this.removeMouseMoveListener()
-
-        if (!this.isMounted()){
-            return
-        }
-
-        this.setState({
-            menu         : menu,
-            menuOffset   : offset,
-            timestamp    : +new Date(),
-            nextMenu     : null
-        })
     },
 
     onMenuItemMouseOut: function(itemProps, leaveOffset) {
@@ -257,20 +293,10 @@ var MenuClass = React.createClass({
 
     },
 
-    componentWillUpdate: function(nextProps, nextState) {
-        if (nextState && nextState.menu){
-            // debugger
-            nextState.menu.props.onHide = this.onSubMenuHide
-        }
-    },
-
     /**
      * Called when mouseout happens on the item for which there is a submenu displayed
      */
     onMenuItemMouseOver: function(itemProps, menuOffset, entryPoint) {
-
-        // console.log('mouse over')
-        // console.log(offset)
 
         if (!this.isMounted()){
             return
@@ -282,9 +308,8 @@ var MenuClass = React.createClass({
 
         if (!this.state.menu){
             //there is no menu visible, so it's safe to show the menu
-            this.showMenu(itemProps.menu, menuOffset)
+            this.setMenu(itemProps.menu, menuOffset)
         } else {
-            console.log('mouse over', itemProps.label, ' - queue as next menu')
             //there is a menu visible, from the previous item that had mouse over
             //so we should queue this item's menu as the next menu to be shown
             this.setState({
@@ -326,8 +351,6 @@ var MenuClass = React.createClass({
             [x3, y3]
         ]
 
-        // console.log(triangle)
-
         this.removeMouseMoveListener()
 
         this.onWindowMouseMove = function(event){
@@ -336,47 +359,39 @@ var MenuClass = React.createClass({
 
             if (!inTriangle(point, triangle)){
 
-                console.log('not in triangle')
                 this.removeMouseMoveListener()
 
-                // if (this.hideMenuIf()){
-                //     console.log('show new menu')
-                // if (this.state.menu){
-                //     debugger
-                //     console.log(this.state.menu.state)
-                // }
-                if (this.state.subMenuMouseOver){
-
-                } else {
-                    this.showMenu(this.state.nextMenu, this.state.nextMenuOffset)
+                if (!this.state.mouseOverSubMenu){
+                    //the mouse is not over a sub menu item
+                    //
+                    //so we show a menu of a sibling item, or hide the menu
+                    //if no sibling item visited
+                    this.setMenu(this.state.nextMenu, this.state.nextMenuOffset)
                 }
-                // }
             }
-
-            // console.log('move')
         }.bind(this)
 
         window.addEventListener('mousemove', this.onWindowMouseMove)
     },
 
-    hideMenuIf: function(callback) {
-        if (!this.state.subMenuMouseOver){
-            this.hideMenu(callback)
+    setMenu: function(menu, offset) {
 
-            return true
-        }
-    },
-
-    hideMenu: function(callback) {
         this.removeMouseMoveListener()
 
-        if (this.isMounted()){
-            this.setState({
-                menu: null
-            }, callback || emptyFn)
-
-            // ;(this.props.onHide || emptyFn)()
+        if (!this.isMounted()){
+            return
         }
+
+        if (!menu && !this.state.mouseInside){
+            this.onInactivate()
+        }
+
+        this.setState({
+            menu         : menu,
+            menuOffset   : offset,
+            timestamp    : +new Date(),
+            nextMenu     : null
+        })
     },
 
     renderItem: function(props, state, item, index) {
@@ -418,9 +433,9 @@ var MenuClass = React.createClass({
     }
 })
 
-MenuClass.Item = MenuItem
+MenuClass.Item      = MenuItem
 MenuClass.Item.Cell = MenuItemCell
 MenuClass.ItemCell  = MenuItemCell
-MenuClass.Separator  = MenuSeparator
+MenuClass.Separator = MenuSeparator
 
 module.exports = MenuClass

@@ -68,9 +68,6 @@ var App = React.createClass({
                             </Menu.Item>
                             <Menu.Item onClick={this.handleItemClick}>
                                 <Menu.Item.Cell>two</Menu.Item.Cell>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>three</Menu.Item.Cell>
 
                                 <Menu>
                                     <Menu.Item onClick={this.handleItemClick}>
@@ -80,7 +77,33 @@ var App = React.createClass({
                                         <Menu.Item.Cell>two</Menu.Item.Cell>
                                     </Menu.Item>
                                     <Menu.Item onClick={this.handleItemClick}>
+                                        <Menu>
+                                            <Menu.Item onClick={this.handleItemClick}>
+                                                <Menu.Item.Cell>one</Menu.Item.Cell>
+                                            </Menu.Item>
+                                            <Menu.Item onClick={this.handleItemClick}>
+                                                <Menu.Item.Cell>two</Menu.Item.Cell>
+                                            </Menu.Item>
+                                            <Menu.Item onClick={this.handleItemClick}>
+                                                <Menu.Item.Cell>three</Menu.Item.Cell>
+                                            </Menu.Item>
+                                        </Menu>
                                         <Menu.Item.Cell>three</Menu.Item.Cell>
+                                    </Menu.Item>
+                                </Menu>
+                            </Menu.Item>
+                            <Menu.Item onClick={this.handleItemClick}>
+                                <Menu.Item.Cell>three</Menu.Item.Cell>
+
+                                <Menu>
+                                    <Menu.Item onClick={this.handleItemClick}>
+                                        <Menu.Item.Cell>3. one</Menu.Item.Cell>
+                                    </Menu.Item>
+                                    <Menu.Item onClick={this.handleItemClick}>
+                                        <Menu.Item.Cell>3. two</Menu.Item.Cell>
+                                    </Menu.Item>
+                                    <Menu.Item onClick={this.handleItemClick}>
+                                        <Menu.Item.Cell>3. three</Menu.Item.Cell>
                                     </Menu.Item>
                                 </Menu>
                             </Menu.Item>

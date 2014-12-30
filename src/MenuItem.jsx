@@ -55,8 +55,8 @@ var MenuItem = React.createClass({
         }
 
         props.onClick     = this.handleClick
-        props.onMouseOver = this.tryHandleMouseOver.bind(this, props)
-        props.onMouseOut  = this.tryHandleMouseOut.bind(this, props)
+        props.onMouseEnter = this.handleMouseEnter.bind(this, props)
+        props.onMouseLeave  = this.handleMouseLeave.bind(this, props)
         props.onMouseDown = this.handleMouseDown
         props.onMouseMove = this.handleMouseMove
 
@@ -93,7 +93,12 @@ var MenuItem = React.createClass({
         props.showMenu(menu, offset)
     },
 
-    handleMouseOver: function(props, offset) {
+    handleMouseEnter: function(props, event) {
+
+        var offset = {
+            x: event.pageX,
+            y: event.pageY
+        }
 
         this.setState({
             mouseOver: true
@@ -117,7 +122,12 @@ var MenuItem = React.createClass({
         }
     },
 
-    handleMouseOut: function(props, offset) {
+    handleMouseLeave: function(props, event) {
+
+        var offset = {
+            x: event.pageX,
+            y: event.pageY
+        }
 
         if (this.isMounted()){
             this.setState({
@@ -133,39 +143,38 @@ var MenuItem = React.createClass({
 
     tryHandleMouseOver: function(props, event){
 
-        this.setState({
-            tryMouseOver: true
-        })
+        // console.log('MOUSE OVER')
 
-        var offset = {
-            x: event.pageX,
-            y: event.pageY
-        }
+        // this.setState({
+        //     tryMouseOver: true
+        // })
 
-        setTimeout(function(){
-            if (this.state.tryMouseOver && !this.state.mouseOver && this.isMounted()){
+
+
+        // setTimeout(function(){
+        //     if (this.state.tryMouseOver && !this.state.mouseOver && this.isMounted()){
                 this.handleMouseOver(props, offset)
-            }
-        }.bind(this), 0)
+            // }
+        // }.bind(this), 0)
 
     },
 
     tryHandleMouseOut: function(props, event){
 
-        this.setState({
-            tryMouseOver: false
-        })
+        // this.setState({
+        //     tryMouseOver: false
+        // })
 
         var offset = {
             x: event.pageX,
             y: event.pageY
         }
 
-        setTimeout(function(){
-            if (!this.state.tryMouseOver && this.state.mouseOver){
+        // setTimeout(function(){
+        //     if (!this.state.tryMouseOver && this.state.mouseOver){
                 this.handleMouseOut(props, offset)
-            }
-        }.bind(this), 0)
+        //     }
+        // }.bind(this), 0)
 
     },
 
