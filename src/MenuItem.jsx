@@ -27,6 +27,9 @@ var MenuItem = React.createClass({
             },
             defaultActiveStyle: {
                 background: 'rgb(187, 212, 251)'
+            },
+            defaultExpandedStyle: {
+                background: 'rgb(230, 240, 255)'
             }
         }
     },
@@ -44,6 +47,7 @@ var MenuItem = React.createClass({
 
         props.mouseOver = !!state.mouseOver
         props.active    = !!state.active
+        // props.expanded  = !!state.expanded
 
         props.style     = this.prepareStyle(props)
         props.className = this.prepareClassName(props)
@@ -223,6 +227,10 @@ var MenuItem = React.createClass({
             className += ' active ' + (props.activeClassName || '')
         }
 
+        if (props.expanded){
+            className += ' expanded ' + (props.expandedClassName || '')
+        }
+
         return className
     },
 
@@ -230,6 +238,10 @@ var MenuItem = React.createClass({
         var style = {}
 
         assign(style, props.defaultStyle, props.style)
+
+        if (props.expanded){
+            assign(style, props.defaultExpandedStyle, props.expandedStyle)
+        }
 
         if (props.mouseOver){
             assign(style, props.defaultOverStyle, props.overStyle)

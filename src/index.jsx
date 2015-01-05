@@ -1,14 +1,19 @@
 'use strict';
 
-var React  = require('react')
-var assign = require('object-assign')
-var Region = require('region')
+var React      = require('react')
+var assign     = require('object-assign')
+var Region     = require('region')
 var inTriangle = require('point-in-triangle')
 
-var MenuItemCell = require('./MenuItemCell')
+var MenuItem      = require('./MenuItem')
+var MenuItemCell  = require('./MenuItemCell')
 var MenuSeparator = require('./MenuSeparator')
-var MenuItem = require('./MenuItem')
-var MenuItemFactory = React.createFactory(MenuItem)
+
+var renderSubMenu  = require('./renderSubMenu')
+var renderItem     = require('./renderItem')
+var renderChildren = require('./renderChildren')
+
+var propTypes = require('./propTypes')
 
 function emptyFn(){}
 
@@ -16,21 +21,7 @@ var MenuClass = React.createClass({
 
     displayName: 'Menu',
 
-    propTypes: {
-        items      : React.PropTypes.array,
-        columns    : React.PropTypes.array,
-        onMount    : React.PropTypes.func,
-
-        defaultRowActiveStyle: React.PropTypes.object,
-        defaultRowOverStyle  : React.PropTypes.object,
-        defaultRowStyle      : React.PropTypes.object,
-
-        rowActiveStyle: React.PropTypes.object,
-        rowOverStyle  : React.PropTypes.object,
-        rowStyle      : React.PropTypes.object,
-
-        cellStyle  : React.PropTypes.object
-    },
+    propTypes: propTypes,
 
     getDefaultProps: function(){
 
@@ -86,36 +77,19 @@ var MenuClass = React.createClass({
         return assign({}, props.defaultStyle, subMenuStyle, props.style)
     },
 
-    renderSubMenu: function(props) {
-        var menu = this.state.menu
+    /////////////// RENDERING LOGIC
 
-        if (menu){
-            var offset = this.state.menuOffset
-
-            var style = {
-                position: 'absolute',
-                left    : offset.left || offset.x,
-                top     : offset.top || offset.y
-            }
-
-            menu.props.onActivate   = this.onSubMenuActivate
-            menu.props.onInactivate = this.onSubMenuInactivate
-
-            return <div style={style}
-                    onMouseEnter={this.handleSubMenuMouseEnter}
-                    onMouseLeave={this.handleSubMenuMouseLeave}
-                >{menu}</div>
-        }
-    },
+    renderSubMenu: renderSubMenu,
 
     render: function() {
         var props = this.prepareProps(this.props)
+        var state = this.state
 
         var children = props.items?
                             this.renderItems(props):
-                            this.renderChildren(props)
+                            this.renderChildren(props, state)
 
-        var menu = this.renderSubMenu(props)
+        var menu = this.renderSubMenu(props, state)
 
         return (
             <div {...props}>
@@ -136,53 +110,11 @@ var MenuClass = React.createClass({
         return props.items.map(this.renderItem.bind(this, props, this.state))
     },
 
-    renderChildren: function(props) {
-        var children     = props.children
-        var maxCellCount = 1
-        var menuItems    = []
+    renderItem: renderItem,
 
-        React.Children.map(children, function(item){
-            var itemProps = item.props
+    renderChildren: renderChildren,
 
-            menuItems.push(item)
-
-            if (!itemProps || !itemProps.isMenuItem){
-                return
-            }
-
-            var count = React.Children.count(itemProps.children)
-
-            maxCellCount = Math.max(maxCellCount, count)
-        })
-
-
-        var i = -1
-        menuItems.forEach(function(item){
-            var itemProps = item.props
-
-            if (itemProps.isMenuItem){
-                i++
-
-                itemProps.onMenuItemMouseOver = this.onMenuItemMouseOver
-                itemProps.onMenuItemMouseOut  = this.onMenuItemMouseOut
-            }
-
-            var children = itemProps.children
-            var count = React.Children.count(children)
-
-            itemProps.onClick = (itemProps.onClick || emptyFn).bind(null, i, itemProps)
-
-            if (count < maxCellCount){
-                children = item.props.children = [children]
-            }
-            while (count < maxCellCount){
-                count++
-                children.push(<MenuItemCell />)
-            }
-        }, this)
-
-        return menuItems
-    },
+    ////////////////////////// BEHAVIOUR LOGIC
 
     handleMouseEnter: function() {
         this.setState({
@@ -203,17 +135,20 @@ var MenuClass = React.createClass({
     },
 
     onActivate: function() {
+        if (!this.state.activated){
+            // console.log('activated')
+            this.setState({
+                activated: true
+            })
 
-        this.setState({
-            activated: true
-        })
-
-        ;(this.props.onActivate || emptyFn)()
+            ;(this.props.onActivate || emptyFn)()
+        }
     },
 
     onInactivate: function() {
 
         if (this.state.activated){
+            // console.log('inactivated')
 
             this.setState({
                 activated: false
@@ -250,8 +185,10 @@ var MenuClass = React.createClass({
     },
 
     onSubMenuInactivate: function() {
-
         var ts = +new Date()
+
+        var nextMenu   = this.state.nextMenu
+        var nextMenuTs = this.state.nextMenuTimestamp || 0
 
         this.setState({
             subMenuActive: false,
@@ -259,13 +196,10 @@ var MenuClass = React.createClass({
         }, function(){
 
             setTimeout(function(){
-                if (ts != this.state.timestamp){
-                    //a menu show has occured in the mean-time,
-                    //so skip hiding the menu
-                    if (this.state.nextMenu){
-                        this.setMenu(this.state.nextMenu, this.state.nextMenuOffset)
-                    }
-
+                //a menu show has occured in the mean-time,
+                //so skip hiding the menu
+                if (ts != this.state.timestamp || (nextMenu && (ts - nextMenuTs < 50))){
+                    this.setMenu(this.state.nextMenu, this.state.nextMenuOffset, this.state.nextMenuIndex)
                     return
                 }
 
@@ -286,11 +220,9 @@ var MenuClass = React.createClass({
     },
 
     onMenuItemMouseOut: function(itemProps, leaveOffset) {
-
         if (this.state.menu){
             this.setupCheck(leaveOffset)
         }
-
     },
 
     /**
@@ -302,21 +234,20 @@ var MenuClass = React.createClass({
             return
         }
 
-        if (!itemProps.menu){
+        var menu = itemProps.menu
+        var ts = +new Date()
+
+        if (!menu){
             return
         }
 
         if (!this.state.menu){
             //there is no menu visible, so it's safe to show the menu
-            this.setMenu(itemProps.menu, menuOffset)
+            this.setItem(itemProps, menuOffset)
         } else {
             //there is a menu visible, from the previous item that had mouse over
             //so we should queue this item's menu as the next menu to be shown
-            this.setState({
-                timestamp     : +new Date(),
-                nextMenu      : itemProps.menu,
-                nextMenuOffset: menuOffset
-            })
+            this.setNextItem(itemProps, menuOffset)
         }
     },
 
@@ -366,7 +297,7 @@ var MenuClass = React.createClass({
                     //
                     //so we show a menu of a sibling item, or hide the menu
                     //if no sibling item visited
-                    this.setMenu(this.state.nextMenu, this.state.nextMenuOffset)
+                    this.setMenu(this.state.nextMenu, this.state.nextMenuOffset, this.state.nextMenuIndex)
                 }
             }
         }.bind(this)
@@ -374,55 +305,69 @@ var MenuClass = React.createClass({
         window.addEventListener('mousemove', this.onWindowMouseMove)
     },
 
-    setMenu: function(menu, offset) {
+    setNextItem: function(itemProps, menuOffset) {
+
+        var ts = +new Date()
+
+        this.setState({
+            timestamp     : ts,
+            nextItem: itemProps,
+            nextMenuTimestamp: +new Date(),
+            nextMenu      : itemProps.menu,
+            nextMenuOffset: menuOffset,
+            nextMenuIndex : itemProps.index
+        })
+    },
+
+    setItem: function(itemProps, offset) {
+
+        var menu = itemProps?
+                        itemProps.menu:
+                        null
 
         this.removeMouseMoveListener()
-
-        if (!this.isMounted()){
-            return
-        }
 
         if (!menu && !this.state.mouseInside){
             this.onInactivate()
         }
 
+        if (!this.isMounted()){
+            return
+        }
+
         this.setState({
+            expandedIndex: menu? itemProps.index: -1,
             menu         : menu,
             menuOffset   : offset,
             timestamp    : +new Date(),
-            nextMenu     : null
+            nextMenu     : null,
+            nextMenuTimestamp: null,
+            nextMenuIndex: -1
         })
     },
 
-    renderItem: function(props, state, item, index) {
+    setMenu: function(menu, offset, index) {
 
-        if (item === '-'){
-            return <MenuSeparator key={index}/>
+        // console.log(index,'!!!')
+        this.removeMouseMoveListener()
+
+        if (!menu && !this.state.mouseInside){
+            this.onInactivate()
         }
 
-        var className = props.rowClassName || ''
-        var style = assign({}, props.defautRowStyle, props.rowStyle)
-        var overStyle = assign({}, props.defautRowOverStyle, props.rowOverStyle)
-        var activeStyle = assign({}, props.defautRowActiveStyle, props.rowActiveStyle)
-
-        if (item.cls){
-            className += ' ' + item.cls
+        if (!this.isMounted()){
+            return
         }
 
-        var itemProps = {
-            className  : className,
-            style      : style,
-            overStyle  : overStyle,
-            activeStyle: activeStyle,
-            cellStyle  : props.cellStyle,
-            key        : index,
-            data       : item,
-            index      : index,
-            columns    : props.columns,
-            onClick    : this.handleClick.bind(this, props, item, index)
-        }
-
-        return (props.itemFactory || MenuItemFactory)(itemProps)
+        this.setState({
+            expandedIndex: menu? index: -1,
+            menu         : menu,
+            menuOffset   : offset,
+            timestamp    : +new Date(),
+            nextMenu     : null,
+            nextMenuTimestamp: null,
+            nextMenuIndex: -1
+        })
     },
 
     handleClick: function(props, item, index, event) {

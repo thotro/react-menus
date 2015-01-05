@@ -32,7 +32,7 @@ var MenuItemCell = React.createClass({
         var children = props.children
 
         if (props.expander){
-            children = props.expander === true? '❯': props.expander
+            children = props.expander === true? '›': props.expander
         }
 
         return (
@@ -48,9 +48,9 @@ var MenuItemCell = React.createClass({
         assign(props, thisProps)
 
         props.style = this.prepareStyle(props)
-        if (props.onMouseOver){
-            debugger
-        }
+        // if (props.onMouseOver){
+        //     debugger
+        // }
 
         return props
     },
