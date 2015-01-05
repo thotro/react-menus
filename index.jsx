@@ -114,14 +114,13 @@ var App = React.createClass({
                     </Menu.Item>
 
                     <Menu.Item onClick={this.handleItemClick} label={2}>
+                                                <Menu.Item.Cell>two</Menu.Item.Cell>
+                        <Menu.Item.Cell>icon</Menu.Item.Cell>
                         <Menu>
                             <Menu.Item onClick={this.handleItemClick}>
                                 <Menu.Item.Cell>first in submenu</Menu.Item.Cell>
                             </Menu.Item>
                         </Menu>
-
-                        <Menu.Item.Cell>two</Menu.Item.Cell>
-                        <Menu.Item.Cell>icon</Menu.Item.Cell>
                     </Menu.Item>
                     <Menu.Item label={3}>
                         <Menu.Item.Cell>three </Menu.Item.Cell>

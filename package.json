@@ -52,6 +52,7 @@
     "object-assign": "^2.0.0",
     "point-in-triangle": "^1.0.1",
     "react": "^0.12.0",
+    "react-clonewithprops": "^1.0.1",
     "region": "^2.0.1",
     "select-parent": "^1.0.0"
   }

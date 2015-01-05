@@ -9,7 +9,8 @@ module.exports = function(props, state) {
         var style = {
             position: 'absolute',
             left    : offset.left || offset.x,
-            top     : offset.top || offset.y
+            top     : offset.top || offset.y,
+            zIndex  : 1
         }
 
         menu.props.onActivate   = this.onSubMenuActivate

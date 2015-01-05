@@ -1,10 +1,18 @@
 'use strict';
 
+var React = require('react')
 var MenuItemCell = require('./MenuItemCell')
+
+var cloneWithProps = require('react-clonewithprops')
+var assign         = require('object-assign')
 
 function emptyFn(){}
 
 module.exports = function(props, state) {
+    var expandedIndex = state.itemProps?
+                            state.itemProps.index:
+                            -1
+
     var children     = props.children
     var maxCellCount = 1
     var menuItems    = []
@@ -23,9 +31,8 @@ module.exports = function(props, state) {
         maxCellCount = Math.max(maxCellCount, count)
     })
 
-
     var i = -1
-    menuItems.forEach(function(item){
+    var result = menuItems.map(function(item, keyIndex){
         var itemProps = item.props
 
         if (itemProps.isMenuItem){
@@ -38,18 +45,26 @@ module.exports = function(props, state) {
         var children = itemProps.children
         var count    = React.Children.count(children)
 
-        itemProps.onClick = (itemProps.onClick || emptyFn).bind(null, i, itemProps)
         itemProps.index = i
-        itemProps.expanded = state.expandedIndex == i
+        itemProps.expanded = expandedIndex == i
 
         if (count < maxCellCount){
-            children = item.props.children = [children]
+            children = item.props.children = children? [children]: []
         }
+
         while (count < maxCellCount){
             count++
             children.push(<MenuItemCell />)
         }
+
+        // return item
+        return cloneWithProps(item, {
+            key: keyIndex,
+            onClick: function(){
+                (itemProps.onClick || emptyFn).apply(this, arguments)
+            }.bind(null, i, itemProps)
+        })
     }, this)
 
-    return menuItems
+    return result
 }
