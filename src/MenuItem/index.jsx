@@ -133,8 +133,13 @@ var MenuItem = React.createClass({
                 var thisRegion = Region.from(this.getDOMNode())
 
                 menuOffset = {
-                    x: menuRegion.width,
-                    y : thisRegion.top - menuRegion.top
+                    // pageX : thisRegion.left,
+                    // pageY : thisRegion.top,
+
+                    left  : thisRegion.left - menuRegion.left,
+                    top   : thisRegion.top  - menuRegion.top,
+                    width : thisRegion.width,
+                    height: thisRegion.height
                 }
             }
 

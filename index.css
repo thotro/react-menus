@@ -426,3 +426,6 @@ th {
   padding: 0;
 }
 
+.z-menu {
+  box-shadow: #888 0px 0px 6px;
+}

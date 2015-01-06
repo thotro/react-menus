@@ -51,7 +51,7 @@ module.exports = function(props, state, item, index) {
 
     if (item.items){
         var Menu = require('./Menu')
-        itemProps.children.push(<Menu items={item.items} isMenu={true} />)
+        itemProps.children.push(<Menu items={item.items}/>)
     }
 
     return (props.itemFactory || MenuItemFactory)(itemProps)

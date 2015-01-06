@@ -56,6 +56,7 @@
     "react": "^0.12.0",
     "react-clonewithprops": "^1.0.1",
     "region": "^2.0.1",
+    "region-align": "^2.0.4",
     "select-parent": "^1.0.0"
   }
 }

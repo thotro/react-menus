@@ -27,7 +27,7 @@ var items = [
     '-',
     {
         label: 'Save as',
-        disabled: true,
+        // disabled: true,
         fn: function(props, index, event) {
             event.stopPropagation()
             // console.log('well, hello')
@@ -35,10 +35,10 @@ var items = [
         },
         items: [
             {
-                label: 'PDF'
+                label: 'save as PDF'
             },
             {
-                label: 'ODT'
+                label: 'save as ODT'
             },
             {
                 label: 'MS Word',
@@ -68,9 +68,9 @@ var App = React.createClass({
 
         return (
             <div>
-                <Menu onClick={this.handleClick} columns={['icon','label']} items={items} />
+                <Menu visible={true} onClick={this.handleClick} columns={['icon','label']} items={items} />
 
-                <Menu style={{margin: 10}}>
+                <Menu style={{margin: 10}} at={[100, 200]}>
                     <Menu.Item onClick={this.handleItemClick}>
                         <Menu.Item.Cell>first</Menu.Item.Cell>
                         <Menu items={items} />

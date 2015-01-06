@@ -3,6 +3,7 @@
 var Menu         = require('../Menu')
 var MenuItemCell = require('../MenuItemCell')
 var renderCell   = require('./renderCell')
+var cloneWithProps = require('react-clonewithprops')
 
 module.exports = function(props) {
 
@@ -11,7 +12,9 @@ module.exports = function(props) {
 
     React.Children.forEach(props.children, function(child){
         if (child.props.isMenu){
-            menu = child
+            menu = cloneWithProps(child, {
+                ref: 'subMenu'
+            })
             menu.props.subMenu = true
             return
         }
