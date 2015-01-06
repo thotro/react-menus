@@ -7,17 +7,32 @@ var Menu  = require('./src')
 
 var items = [
     {
+        disabled: true,
+        icon: 'x',
         label: <div>hello!</div>,
-        fn: function() {
+        fn: function(props, index) {
             console.log('well, hello')
+            console.log(arguments)
         }
     },
     {
-        label: 'hi'
+        label: <input placeholder="text" style={{width: '100%', height: '100%'}}/>
+    },
+    {
+        label: 'hi',
+        fn: function(){
+            console.log(arguments, 'hi')
+        }
     },
     '-',
     {
         label: 'Save as',
+        disabled: true,
+        fn: function(props, index, event) {
+            event.stopPropagation()
+            // console.log('well, hello')
+            console.log(arguments)
+        },
         items: [
             {
                 label: 'PDF'
@@ -53,11 +68,12 @@ var App = React.createClass({
 
         return (
             <div>
-                <Menu onClick={this.handleClick} items={items} />
+                <Menu onClick={this.handleClick} columns={['icon','label']} items={items} />
 
                 <Menu style={{margin: 10}}>
                     <Menu.Item onClick={this.handleItemClick}>
                         <Menu.Item.Cell>first</Menu.Item.Cell>
+                        <Menu items={items} />
                     </Menu.Item>
 
                     <Menu.Separator />
@@ -136,8 +152,8 @@ var App = React.createClass({
         )
     },
 
-    handleClick: function(item) {
-        console.log('clicked ', item.label)
+    handleClick: function(itemProps) {
+        console.log('clicked ', arguments)
     }
 })
 
