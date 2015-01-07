@@ -38,7 +38,8 @@ var MenuItem = React.createClass({
             defaultDisabledStyle: {
                 color: 'gray',
                 cursor: 'default'
-            }
+            },
+            expander: '›'
         }
     },
 

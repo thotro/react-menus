@@ -43,20 +43,20 @@
     "stylus-loader": "^0.4.0",
     "url-loader": "^0.5.5",
     "webpack": "^1.4.13",
-    "webpack-dev-server": "^1.6.5"
+    "webpack-dev-server": "^1.6.5",
+    "gulp": "^3.8.10",
+    "gulp-react": "^2.0.0"
   },
   "dependencies": {
     "arrow-style": "^1.1.0",
     "functionally": "^0.6.2",
-    "gulp": "^3.8.10",
-    "gulp-react": "^2.0.0",
     "normalize.css": "^3.0.2",
     "object-assign": "^2.0.0",
     "point-in-triangle": "^1.0.1",
     "react": "^0.12.0",
     "react-clonewithprops": "^1.0.1",
-    "region": "^2.0.1",
-    "region-align": "^2.0.4",
+    "region": "^2.1.0",
+    "region-align": "^2.1.0",
     "select-parent": "^1.0.0"
   }
 }

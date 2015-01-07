@@ -22,30 +22,15 @@ module.exports = function(props, state, item, index) {
                         .filter(x => !!x)
                         .join(' ')
 
-    var style         = assign({}, props.defaultItemStyle, props.itemStyle)
-    var overStyle     = assign({}, props.defaultItemOverStyle, props.itemOverStyle)
-    var activeStyle   = assign({}, props.defaultItemActiveStyle, props.itemActiveStyle)
-    var disabledStyle = assign({}, props.defaultItemDisabledStyle, props.itemDisabledStyle)
-    var expandedStyle = assign({}, props.defaultItemExpandedStyle, props.itemExpandedStyle)
-
-    var itemProps = {
+    var itemProps = assign({
         className  : className,
-
-        style        : style,
-        overStyle    : overStyle,
-        activeStyle  : activeStyle,
-        expandedStyle: expandedStyle,
-        disabledStyle: disabledStyle,
-
-        cellStyle    : props.cellStyle,
-
         key        : index,
         data       : item,
         columns    : props.columns,
         expanded   : index === expandedIndex,
         disabled   : item.disabled,
         onClick    : item.onClick || item.fn
-    }
+    }, props.itemStyleProps)
 
     itemProps.children = renderCells(itemProps)
 

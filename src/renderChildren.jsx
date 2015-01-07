@@ -9,7 +9,8 @@ var assign         = require('object-assign')
 function emptyFn(){}
 
 module.exports = function(props, state) {
-    var expandedIndex = state.itemProps?
+
+    var expandedIndex  = state.itemProps?
                             state.itemProps.index:
                             -1
 
@@ -31,6 +32,7 @@ module.exports = function(props, state) {
         maxCellCount = Math.max(maxCellCount, count)
     })
 
+    var itemStyleProps = props.itemStyleProps
     var i = -1
     var result = menuItems.map(function(item, index){
         var itemProps = item.props
@@ -56,17 +58,25 @@ module.exports = function(props, state) {
 
         var onClick = itemProps.onClick || emptyFn
 
-        return cloneWithProps(item, {
+        return cloneWithProps(item, assign({
             itemIndex: i,
-            key     : index,
-            index   : index,
-            expanded: expandedIndex == index,
-            children: children,
-            onClick : function(props, index, event){
+            key      : index,
+            index    : index,
+            expanded : expandedIndex == index,
+            children : children,
+            expander : props.expander,
+            onClick  : function(props, index, event){
                 onClick.apply(null, arguments)
                 this.onMenuItemClick(props, index, event)
             }.bind(this)
-        })
+        }, {
+            style        : itemStyleProps.itemStyle,
+            overStyle    : itemStyleProps.itemOverStyle,
+            activeStyle  : itemStyleProps.itemActiveStyle,
+            disabledStyle: itemStyleProps.itemDisabledStyle,
+            expandedStyle: itemStyleProps.itemExpandedStyle,
+            cellStyle    : itemStyleProps.cellStyle
+        }))
 
     }, this)
 

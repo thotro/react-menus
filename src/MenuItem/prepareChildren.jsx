@@ -19,12 +19,16 @@ module.exports = function(props) {
             return
         }
 
+        child = cloneWithProps(child, {
+            style: props.cellStyle
+        })
+
         children.push(child)
     })
 
     if (menu){
         props.menu = menu
-        children.push(<MenuItemCell expander={true}/>)
+        children.push(<MenuItemCell expander={props.expander || true}/>)
     }
 
     return children

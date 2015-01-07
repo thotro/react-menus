@@ -7,11 +7,14 @@ var assign     = require('object-assign')
 var Region     = require('region')
 var inTriangle = require('point-in-triangle')
 
-var renderSubMenu  = require('./renderSubMenu')
-var renderChildren = require('./renderChildren')
-var prepareItem    = require('./prepareItem')
+var getConstrainRegion = require('./align/getConstrainRegion')
+var getItemStyleProps = require('./getItemStyleProps')
+var renderSubMenu     = require('./renderSubMenu')
+var renderChildren    = require('./renderChildren')
+var prepareItem       = require('./prepareItem')
 
 var propTypes = require('./propTypes')
+var ScrollContainer = require('./ScrollContainer')
 
 var MenuClass = React.createClass({
 
@@ -23,6 +26,7 @@ var MenuClass = React.createClass({
 
         return {
             isMenu: true,
+            enableScroll: true,
             constrainTo: true,
             defaultStyle: {
                 border  : '1px solid gray',
@@ -32,9 +36,24 @@ var MenuClass = React.createClass({
             defaultSubMenuStyle: {
                 position: 'absolute'
             },
+            scrollerProps: {
+            },
             columns: ['label'],
             items: null,
-            visible: true
+            visible: true,
+            subMenuConstrainMargin: 10,
+
+            defaultItemStyle: {},
+            itemStyle: {},
+            defaultItemOverStyle: {},
+            itemOverStyle: {},
+            defaultItemDisabledStyle: {},
+            itemDisabledStyle: {},
+            defaultItemExpandedStyle: {},
+            itemExpandedStyle: {},
+
+            defaultCellStyle: {},
+            cellStyle: {}
         }
     },
 
@@ -46,6 +65,33 @@ var MenuClass = React.createClass({
 
     componentDidMount: function() {
         ;(this.props.onMount || emptyFn)(this)
+
+        if (this.props.constrainTo && !this.props.subMenu){
+            setTimeout(function(){
+                var scrollRegion = Region.from(this.refs.scrollContainer.getDOMNode())
+                var domRegion = Region.from(this.getDOMNode())
+                var paddingSize = domRegion.height
+
+                var actualHeight = scrollRegion.height + paddingSize
+                //get clientHeight of this dom node, so as to account for padding
+
+                var actualRegion = Region({
+                    top: domRegion.top,
+                    bottom: domRegion.top + actualHeight
+                })
+
+                var constrainRegion = getConstrainRegion(this.props.constrainTo)
+                var newState = {}
+
+                if (actualRegion.bottom > constrainRegion.bottom){
+                    newState = {
+                        maxHeight: constrainRegion.bottom - actualRegion.top - paddingSize
+                    }
+                }
+
+                this.setState(newState)
+            }.bind(this), 0)
+        }
     },
 
     prepareProps: function(thisProps, state) {
@@ -56,9 +102,16 @@ var MenuClass = React.createClass({
         props.style     = this.prepareStyle(props, state)
         props.className = this.prepareClassName(props)
 
+        props.itemStyleProps = getItemStyleProps(props, state)
         props.children  = this.prepareChildren(props, state)
 
+        props.scrollerProps = this.prepareScrollerProps(props)
+
         return props
+    },
+
+    prepareScrollerProps: function(props) {
+        return assign({}, props.scrollerProps)
     },
 
     prepareChildren: function(props, state){
@@ -120,6 +173,12 @@ var MenuClass = React.createClass({
             assign(style, state.style)
         }
 
+        if (!this.isMounted() && props.constrainTo && !props.subMenu){
+            style.visibility = 'hidden'
+            style.maxHeight = 0
+            style.overflow = 'hidden'
+        }
+
         return style
     },
 
@@ -131,28 +190,26 @@ var MenuClass = React.createClass({
         var state = this.state
         var props = this.prepareProps(this.props, state)
 
+        var menu     = this.renderSubMenu(props, state)
         var children = this.renderChildren(props, state)
-
-        var menu = this.renderSubMenu(props, state)
 
         return (
             <div {...props}>
                 {menu}
-                <table ref="table"
+                <ScrollContainer
                     onMouseEnter={this.handleMouseEnter}
                     onMouseLeave={this.handleMouseLeave}
-                >
-                    <tbody>
-                        {children}
-                    </tbody>
-                </table>
+                    scrollerProps={props.scrollerProps}
+                    ref="scrollContainer" enableScroll={props.enableScroll} maxHeight={state.maxHeight || props.maxHeight}>
+                    <table ref="table">
+                        <tbody>
+                            {children}
+                        </tbody>
+                    </table>
+                </ScrollContainer>
             </div>
         )
     },
-
-    // renderItems: function(props){
-    //     return props.items.map(this.renderItem.bind(this, props, this.state))
-    // },
 
     renderChildren: renderChildren,
 
@@ -338,10 +395,8 @@ var MenuClass = React.createClass({
             if (!inTriangle(point, triangle)){
 
                 this.removeMouseMoveListener()
-                // console.log('out')
 
                 if (!this.state.mouseOverSubMenu){
-                    // console.log('out next')
                     //the mouse is not over a sub menu item
                     //
                     //so we show a menu of a sibling item, or hide the menu
@@ -373,6 +428,10 @@ var MenuClass = React.createClass({
                         itemProps.menu:
                         null
 
+        // if (!menu){
+        //     return
+        // }
+
         this.removeMouseMoveListener()
 
         if (!this.isMounted()){
@@ -397,11 +456,9 @@ var MenuClass = React.createClass({
     },
 
     onMenuItemClick: function(props, index, event) {
-        // console.log(arguments, ' menu click')
         var stopped = event.isPropagationStopped()
 
         event.stopPropagation()
-        // ;(item.fn || emptyFn)(item, event)
 
         if (!stopped){
             ;(this.props.onClick || emptyFn)(props, index, event)
