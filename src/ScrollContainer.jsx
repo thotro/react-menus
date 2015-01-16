@@ -37,7 +37,10 @@ module.exports = React.createClass({
     componentDidMount: function(){
         if (this.props.enableScroll){
             setTimeout(function(){
-                // debugger
+                if (!this.isMounted()){
+                    return
+                }
+
                 this.adjustScroll()
 
                 window.addEventListener('resize', this.onResizeListener = buffer(this.onWindowResize, this.props.onWindowResizeBuffer, this))

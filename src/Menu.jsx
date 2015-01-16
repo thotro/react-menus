@@ -53,7 +53,9 @@ var MenuClass = React.createClass({
             itemExpandedStyle: {},
 
             defaultCellStyle: {},
-            cellStyle: {}
+            cellStyle: {},
+
+            stopClickPropagation: true
         }
     },
 
@@ -66,30 +68,66 @@ var MenuClass = React.createClass({
     componentDidMount: function() {
         ;(this.props.onMount || emptyFn)(this)
 
-        if (this.props.constrainTo && !this.props.subMenu){
+        if ((this.props.constrainTo || this.props.alignTo) && !this.props.subMenu){
             setTimeout(function(){
+
+                if (!this.isMounted()){
+                    return
+                }
+                var props = this.props
+
                 var scrollRegion = Region.from(this.refs.scrollContainer.getDOMNode())
-                var domRegion = Region.from(this.getDOMNode())
-                var paddingSize = domRegion.height
+                var domNode      = this.getDOMNode()
+                var domRegion    = Region.from(domNode)
+                var paddingSize  = domRegion.height
 
                 var actualHeight = scrollRegion.height + paddingSize
                 //get clientHeight of this dom node, so as to account for padding
 
+                //build the actual region of the menu
                 var actualRegion = Region({
-                    top: domRegion.top,
+                    left  : domRegion.left,
+                    right : domRegion.right,
+
+                    top   : domRegion.top,
                     bottom: domRegion.top + actualHeight
                 })
 
-                var constrainRegion = getConstrainRegion(this.props.constrainTo)
-                var newState = {}
+                var constrainRegion = props.constrainTo?
+                                        getConstrainRegion(props.constrainTo):
+                                        null
 
-                if (actualRegion.bottom > constrainRegion.bottom){
+                var newState
+
+                if (props.alignTo){
+                    var parentRegion = Region.from(domNode.parentNode)
+                    var alignRegion = Region.from(props.alignTo)
+
+                    actualRegion.alignTo(alignRegion, props.alignPositions, {
+                        offset: props.alignOffset,
+                        constrain: constrainRegion
+                    })
+
+                    var newTop = actualRegion.top - parentRegion.top
+                    var newLeft = actualRegion.left - parentRegion.left
+
                     newState = {
-                        maxHeight: constrainRegion.bottom - actualRegion.top - paddingSize
+                        style: {
+                            left: newLeft,
+                            top : newTop
+                        }
                     }
                 }
 
-                this.setState(newState)
+                if (constrainRegion){
+                    newState = newState || {}
+
+                    if (actualRegion.bottom > constrainRegion.bottom){
+                        newState.maxHeight = constrainRegion.bottom - actualRegion.top - paddingSize
+                    }
+                }
+
+                newState && this.setState(newState)
             }.bind(this), 0)
         }
     },
@@ -173,10 +211,12 @@ var MenuClass = React.createClass({
             assign(style, state.style)
         }
 
-        if (!this.isMounted() && props.constrainTo && !props.subMenu){
+        if (!this.isMounted() && (props.constrainTo || props.alignTo) && !props.subMenu){
+            //when a top menu is initially rendered (and should be constrained or has alignTo)
+            //we show it hidden initially, so we can safely constrain and/or align it
             style.visibility = 'hidden'
-            style.maxHeight = 0
-            style.overflow = 'hidden'
+            style.maxHeight  = 0
+            style.overflow   = 'hidden'
         }
 
         return style
@@ -458,7 +498,7 @@ var MenuClass = React.createClass({
     onMenuItemClick: function(props, index, event) {
         var stopped = event.isPropagationStopped()
 
-        event.stopPropagation()
+        props.stopClickPropagation && event.stopPropagation()
 
         if (!stopped){
             ;(this.props.onClick || emptyFn)(props, index, event)
