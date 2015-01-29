@@ -28,17 +28,7 @@ var App = React.createClass({
     },
 
     render: function() {
-        //     <Menu.Item>
-        //         <Menu.Item.Cell>hello</Menu.Item.Cell>
-        //     </Menu.Item>
-
-        //     <Menu.Item>
-        //         <Menu.Item.Cell>hi</Menu.Item.Cell>
-        //     </Menu.Item>
-        // </Menu>
-
-                // <Menu visible={true} onClick={this.handleClick} columns={['icon','label']} items={items} />
-
+        
         <Menu cellStyle={{padding: 10 }} at={[100, 100]}>
             <Menu.Item onClick={this.handleItemClick}>
                 <Menu.Item.Cell>first</Menu.Item.Cell>
