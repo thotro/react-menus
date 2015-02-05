@@ -32,7 +32,13 @@ module.exports = function(props) {
 
     if (menu){
         props.menu = menu
-        children.push(<MenuItemCell expander={props.expander || true}/>)
+        var expander = props.expander || true
+        var expanderProps = {}
+
+        if (expander){
+            expanderProps.onClick = props.onExpanderClick
+        }
+        children.push(<MenuItemCell expander={expander} {...expanderProps}/>)
     }
 
     return children

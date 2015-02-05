@@ -6,7 +6,9 @@ var React      = require('react')
 var assign     = require('object-assign')
 var Region     = require('region')
 var inTriangle = require('point-in-triangle')
+var hasTouch = require('has-touch')
 
+var getMenuOffset = require('./getMenuOffset')
 var getConstrainRegion = require('./align/getConstrainRegion')
 var getItemStyleProps = require('./getItemStyleProps')
 var renderSubMenu     = require('./renderSubMenu')
@@ -495,10 +497,28 @@ var MenuClass = React.createClass({
         })
     },
 
+    onMenuItemExpanderClick: function(event) {
+        event.nativeEvent.expanderClick = true
+    },
+
     onMenuItemClick: function(props, index, event) {
+
         var stopped = event.isPropagationStopped()
 
         props.stopClickPropagation && event.stopPropagation()
+
+        if (hasTouch && event && event.nativeEvent && event.nativeEvent.expanderClick){
+
+            var offset = {
+                x: event.pageX,
+                y: event.pageY
+            }
+
+            var menuOffset = getMenuOffset(event.currentTarget)
+            this.onMenuItemMouseOver(props, menuOffset, offset)
+
+            return
+        }
 
         if (!stopped){
             ;(this.props.onClick || emptyFn)(event, props, index)

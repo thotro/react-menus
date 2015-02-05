@@ -58,13 +58,14 @@ module.exports = function(props, state) {
 
         var onClick = itemProps.onClick || emptyFn
 
-        return cloneWithProps(item, assign({
+        var cloned = cloneWithProps(item, assign({
             itemIndex: i,
             key      : index,
             index    : index,
             expanded : expandedIndex == index,
             children : children,
             expander : props.expander,
+            onExpanderClick: this.onMenuItemExpanderClick,
             onClick  : function(props, index, event){
                 onClick.apply(null, arguments)
                 this.onMenuItemClick(props, index, event)
@@ -77,6 +78,8 @@ module.exports = function(props, state) {
             expandedStyle: itemStyleProps.itemExpandedStyle,
             cellStyle    : itemStyleProps.cellStyle
         }))
+
+        return cloned
 
     }, this)
 
