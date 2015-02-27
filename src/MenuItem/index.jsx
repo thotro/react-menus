@@ -27,13 +27,15 @@ var MenuItem = React.createClass({
                 background: 'white'
             },
             defaultOverStyle: {
-                background: '#d7e7ff'
+                background: 'rgb(118, 181, 231)',
+                color: 'white'
             },
             defaultActiveStyle: {
-                background: 'rgb(187, 212, 251)'
+                background: 'rgb(118, 181, 231)',
             },
             defaultExpandedStyle: {
-                background: 'rgb(230, 240, 255)'
+                background: 'rgb(154, 196, 229)',
+                color: 'white'
             },
             defaultDisabledStyle: {
                 color: 'gray',
@@ -128,11 +130,11 @@ var MenuItem = React.createClass({
             var menuOffset
 
             if (props.menu){
-                console.log(props);
+                // console.log(props);
                 menuOffset = getMenuOffset(this.getDOMNode())
             }
 
-            console.log(menuOffset, offset);
+            // console.log(menuOffset, offset);
             props.onMenuItemMouseOver(props, menuOffset, offset)
         }
     },

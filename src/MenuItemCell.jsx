@@ -22,7 +22,7 @@ var MenuItemCell = React.createClass({
     getDefaultProps: function() {
         return {
             defaultStyle: {
-                padding: 10,
+                padding: 5,
                 whiteSpace: 'nowrap'
             }
         }

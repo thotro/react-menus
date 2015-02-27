@@ -8,6 +8,8 @@ var Region     = require('region')
 var inTriangle = require('point-in-triangle')
 var hasTouch = require('has-touch')
 
+var normalize = require('react-style-normalizer')
+
 var getMenuOffset = require('./getMenuOffset')
 var getConstrainRegion = require('./align/getConstrainRegion')
 var getItemStyleProps = require('./getItemStyleProps')
@@ -31,9 +33,14 @@ var MenuClass = React.createClass({
             enableScroll: true,
             constrainTo: true,
             defaultStyle: {
-                border  : '1px solid gray',
                 display : 'inline-block',
-                position: 'relative'
+                position: 'relative',
+
+                //theme props
+                border: '1px solid rgb(218, 218, 218)',
+                color: 'rgb(120, 120, 120)'
+                // ,
+                // boxShadow: 'rgb(136, 136, 136) 0px 0px 6px'
             },
             defaultSubMenuStyle: {
                 position: 'absolute'
@@ -221,7 +228,7 @@ var MenuClass = React.createClass({
             style.overflow   = 'hidden'
         }
 
-        return style
+        return normalize(style)
     },
 
     /////////////// RENDERING LOGIC
@@ -243,7 +250,7 @@ var MenuClass = React.createClass({
                     onMouseLeave={this.handleMouseLeave}
                     scrollerProps={props.scrollerProps}
                     ref="scrollContainer" enableScroll={props.enableScroll} maxHeight={state.maxHeight || props.maxHeight}>
-                    <table ref="table">
+                    <table ref="table" style={{borderSpacing: 0}}>
                         <tbody>
                             {children}
                         </tbody>
