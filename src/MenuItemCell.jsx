@@ -49,9 +49,6 @@ var MenuItemCell = React.createClass({
         assign(props, thisProps)
 
         props.style = this.prepareStyle(props)
-        // if (props.onMouseOver){
-        //     debugger
-        // }
 
         return props
     },
@@ -60,6 +57,10 @@ var MenuItemCell = React.createClass({
         var style = {}
 
         assign(style, props.defaultStyle, props.style)
+
+        // if (props.itemIndex != props.itemCount - 1){
+        //     style.paddingBottom = 0
+        // }
 
         return style
     }

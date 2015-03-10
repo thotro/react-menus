@@ -22,6 +22,7 @@ var MenuItem = React.createClass({
     getDefaultProps: function() {
         return {
             isMenuItem: true,
+            interactionStyles: true,
             defaultStyle: {
                 cursor: 'pointer',
                 background: 'white'
@@ -200,16 +201,18 @@ var MenuItem = React.createClass({
 
         } else {
 
-            if (props.expanded){
-                assign(style, props.defaultExpandedStyle, props.expandedStyle)
-            }
+            if (props.interactionStyles){
+                if (props.expanded){
+                    assign(style, props.defaultExpandedStyle, props.expandedStyle)
+                }
 
-            if (props.mouseOver){
-                assign(style, props.defaultOverStyle, props.overStyle)
-            }
+                if (props.mouseOver){
+                    assign(style, props.defaultOverStyle, props.overStyle)
+                }
 
-            if (props.active){
-                assign(style, props.defaultActiveStyle, props.activeStyle)
+                if (props.active){
+                    assign(style, props.defaultActiveStyle, props.activeStyle)
+                }
             }
         }
 

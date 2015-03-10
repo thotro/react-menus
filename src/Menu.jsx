@@ -4,7 +4,7 @@ function emptyFn(){}
 
 var React      = require('react')
 var assign     = require('object-assign')
-var Region     = require('region')
+var Region     = window.Region = require('region')
 var inTriangle = require('point-in-triangle')
 var hasTouch = require('has-touch')
 
@@ -32,8 +32,10 @@ var MenuClass = React.createClass({
             isMenu: true,
             enableScroll: true,
             constrainTo: true,
+            interactionStyles: true,
             defaultStyle: {
                 display : 'inline-block',
+                boxSizing: 'border-box',
                 position: 'relative',
 
                 //theme props

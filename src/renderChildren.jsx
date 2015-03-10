@@ -37,7 +37,7 @@ module.exports = function(props, state) {
     var result = menuItems.map(function(item, index){
         var itemProps = item.props
 
-        if (itemProps.isMenuItem){
+        if (itemProps && itemProps.isMenuItem){
             i++
 
             itemProps.onMenuItemMouseOver = this.onMenuItemMouseOver
@@ -59,7 +59,9 @@ module.exports = function(props, state) {
         var onClick = itemProps.onClick || emptyFn
 
         var cloned = cloneWithProps(item, assign({
+            interactionStyles: props.interactionStyles,
             itemIndex: i,
+            itemCount: menuItems.length,
             key      : index,
             index    : index,
             expanded : expandedIndex == index,
