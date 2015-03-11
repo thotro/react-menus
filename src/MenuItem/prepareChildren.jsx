@@ -1,5 +1,6 @@
 'use strict';
 
+var React        = require('react')
 var Menu         = require('../Menu')
 var MenuItemCell = require('../MenuItemCell')
 var renderCell   = require('./renderCell')
