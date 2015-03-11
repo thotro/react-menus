@@ -1,6 +1,7 @@
 'use strict';
 
-var assign = require('object-assign')
+var React        = require('react')
+var assign       = require('object-assign')
 var MenuItemCell = require('../MenuItemCell')
 
 module.exports = function(props, column) {
