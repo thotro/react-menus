@@ -78,10 +78,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	function emptyFn(){}
 
 	var React      = __webpack_require__(5)
-	var assign     = __webpack_require__(18)
-	var Region     = window.Region = __webpack_require__(15)
-	var inTriangle = __webpack_require__(16)
-	var hasTouch = __webpack_require__(17)
+	var assign     = __webpack_require__(15)
+	var Region     = __webpack_require__(16)
+	var inTriangle = __webpack_require__(17)
+	var hasTouch = __webpack_require__(18)
 
 	var normalize = __webpack_require__(25)
 
@@ -619,7 +619,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign =__webpack_require__(18)
+	var assign =__webpack_require__(15)
 	var arrowStyle =__webpack_require__(19)
 
 	function expanderStyle(){
@@ -693,7 +693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(18)
+	var assign = __webpack_require__(15)
 
 	var emptyFn = function(){}
 
@@ -753,7 +753,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(18)
+	var assign = __webpack_require__(15)
 	var EVENT_NAMES = __webpack_require__(20)
 	var getMenuOffset = __webpack_require__(6)
 
@@ -986,7 +986,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 	var selectParent = __webpack_require__(26)
 
 	module.exports = function(domNode){
@@ -1011,7 +1011,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assign = __webpack_require__(18)
+	var assign = __webpack_require__(15)
 
 	module.exports = function(props, state){
 
@@ -1038,9 +1038,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** @jsx React.DOM */'use strict';
 
-	var Region           = __webpack_require__(15)
-	var assign           = __webpack_require__(18)
-	var cloneWithProps   = __webpack_require__(27)
+	var Region           = __webpack_require__(16)
+	var assign           = __webpack_require__(15)
+	var cloneWithProps   = __webpack_require__(28)
 	var getPositionStyle = __webpack_require__(21)
 
 	module.exports = function(props, state) {
@@ -1077,8 +1077,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(5)
 	var MenuItemCell = __webpack_require__(2)
 
-	var cloneWithProps = __webpack_require__(27)
-	var assign         = __webpack_require__(18)
+	var cloneWithProps = __webpack_require__(28)
+	var assign         = __webpack_require__(15)
 
 	function emptyFn(){}
 
@@ -1169,7 +1169,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(18)
+	var assign = __webpack_require__(15)
 
 	var renderCells     = __webpack_require__(22)
 	var MenuItem        = __webpack_require__(4)
@@ -1241,9 +1241,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict'
 
 	var React    = __webpack_require__(5)
-	var assign   = __webpack_require__(18)
+	var assign   = __webpack_require__(15)
 	var Scroller = __webpack_require__(23)
-	var F        = __webpack_require__(28)
+	var F        = __webpack_require__(27)
 	var buffer   = F.buffer
 
 	function stop(event){
@@ -1491,7 +1491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var Menu         = __webpack_require__(1)
 	var MenuItemCell = __webpack_require__(2)
 	var renderCell   = __webpack_require__(24)
-	var cloneWithProps = __webpack_require__(27)
+	var cloneWithProps = __webpack_require__(28)
 
 	module.exports = function(props) {
 
@@ -1540,7 +1540,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 	var selectParent = __webpack_require__(26)
 
 	module.exports = function(constrainTo){
@@ -1564,45 +1564,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(29)
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	//http://www.blackpawn.com/texts/pointinpoly/
-	module.exports = function pointInTriangle(point, triangle) {
-	    //compute vectors & dot products
-	    var cx = point[0], cy = point[1],
-	        t0 = triangle[0], t1 = triangle[1], t2 = triangle[2],
-	        v0x = t2[0]-t0[0], v0y = t2[1]-t0[1],
-	        v1x = t1[0]-t0[0], v1y = t1[1]-t0[1],
-	        v2x = cx-t0[0], v2y = cy-t0[1],
-	        dot00 = v0x*v0x + v0y*v0y,
-	        dot01 = v0x*v1x + v0y*v1y,
-	        dot02 = v0x*v2x + v0y*v2y,
-	        dot11 = v1x*v1x + v1y*v1y,
-	        dot12 = v1x*v2x + v1y*v2y
-
-	    // Compute barycentric coordinates
-	    var b = (dot00 * dot11 - dot01 * dot01),
-	        inv = b === 0 ? 0 : (1 / b),
-	        u = (dot11*dot02 - dot01*dot12) * inv,
-	        v = (dot00*dot12 - dot01*dot02) * inv
-	    return u>=0 && v>=0 && (u+v < 1)
-	}
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1632,6 +1593,45 @@ return /******/ (function(modules) { // webpackBootstrap
 		return to;
 	};
 
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(29)
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	//http://www.blackpawn.com/texts/pointinpoly/
+	module.exports = function pointInTriangle(point, triangle) {
+	    //compute vectors & dot products
+	    var cx = point[0], cy = point[1],
+	        t0 = triangle[0], t1 = triangle[1], t2 = triangle[2],
+	        v0x = t2[0]-t0[0], v0y = t2[1]-t0[1],
+	        v1x = t1[0]-t0[0], v1y = t1[1]-t0[1],
+	        v2x = cx-t0[0], v2y = cy-t0[1],
+	        dot00 = v0x*v0x + v0y*v0y,
+	        dot01 = v0x*v1x + v0y*v1y,
+	        dot02 = v0x*v2x + v0y*v2y,
+	        dot11 = v1x*v1x + v1y*v1y,
+	        dot12 = v1x*v2x + v1y*v2y
+
+	    // Compute barycentric coordinates
+	    var b = (dot00 * dot11 - dot01 * dot01),
+	        inv = b === 0 ? 0 : (1 / b),
+	        u = (dot11*dot02 - dot01*dot12) * inv,
+	        v = (dot00*dot12 - dot01*dot02) * inv
+	    return u>=0 && v>=0 && (u+v < 1)
+	}
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 19 */
@@ -1690,7 +1690,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = __webpack_require__(37)?
+	module.exports = __webpack_require__(40)?
 		{
 			onMouseDown: 'onTouchStart',
 			onMouseUp  : 'onTouchEnd',
@@ -1708,8 +1708,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(15)
-	var assign = __webpack_require__(18)
+	var Region = __webpack_require__(16)
+	var assign = __webpack_require__(15)
 	var align  = __webpack_require__(34)
 
 	module.exports = function getPositionStyle(props, state){
@@ -1835,7 +1835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React         = __webpack_require__(5)
-	var assign        = __webpack_require__(18)
+	var assign        = __webpack_require__(15)
 	var getArrowStyle = __webpack_require__(19)
 
 	function emptyFn(){}
@@ -2039,7 +2039,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** @jsx React.DOM */'use strict';
 
-	var assign = __webpack_require__(18)
+	var assign = __webpack_require__(15)
 	var MenuItemCell = __webpack_require__(2)
 
 	module.exports = function(props, column) {
@@ -2136,82 +2136,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var React    = __webpack_require__(5)
-	  , hasOwn   = Object.prototype.hasOwnProperty
-	  , version  = React.version.split('.').map(parseFloat)
-	  , RESERVED = {
-	      className:  resolve(joinClasses),
-	      children:   function(){},
-	      key:        function(){},
-	      ref:        function(){},
-	      style:      resolve(extend)
-	    };
-
-	module.exports = function cloneWithProps(child, props) {
-	  var newProps = mergeProps(props, child.props);
-
-	  if (!hasOwn.call(newProps, 'children') && hasOwn.call(child.props, 'children'))
-	    newProps.children = child.props.children;
-
-	  // < 0.11
-	  if (version[0] === 0 && version[1] < 11)
-	    return child.constructor.ConvenienceConstructor(newProps);
-	  
-	  // 0.11
-	  if (version[0] === 0 && version[1] === 11)
-	    return child.constructor(newProps);
-
-	  // 0.12
-	  else if (version[0] === 0 && version[1] === 12){
-	    MockLegacyFactory.isReactLegacyFactory = true
-	    MockLegacyFactory.type = child.type
-	    return React.createElement(MockLegacyFactory, newProps);
-	  }
-
-	  // 0.13+
-	  return React.createElement(child.type, newProps);
-
-	  function MockLegacyFactory(){}
-	}
-
-	function mergeProps(currentProps, childProps) {
-	  var newProps = extend(currentProps), key
-
-	  for (key in childProps) {
-	    if (hasOwn.call(RESERVED, key) )
-	      RESERVED[key](newProps, childProps[key], key)
-
-	    else if ( !hasOwn.call(newProps, key) )
-	      newProps[key] = childProps[key];
-	  }
-	  return newProps
-	}
-
-	function resolve(fn){
-	  return function(src, value, key){
-	    if( !hasOwn.call(src, key)) src[key] = value
-	    else src[key] = fn(src[key], value)
-	  }
-	}
-
-	function joinClasses(a, b){
-	  if ( !a ) return b || ''
-	  return a + (b ? ' ' + b : '')
-	}
-
-	function extend() {
-	  var target = {};
-	  for (var i = 0; i < arguments.length; i++) 
-	    for (var key in arguments[i]) if (hasOwn.call(arguments[i], key)) 
-	      target[key] = arguments[i][key]   
-	  return target
-	}
-
-/***/ },
-/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	    var setImmediate = function(fn){
@@ -2859,6 +2783,82 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var React    = __webpack_require__(5)
+	  , hasOwn   = Object.prototype.hasOwnProperty
+	  , version  = React.version.split('.').map(parseFloat)
+	  , RESERVED = {
+	      className:  resolve(joinClasses),
+	      children:   function(){},
+	      key:        function(){},
+	      ref:        function(){},
+	      style:      resolve(extend)
+	    };
+
+	module.exports = function cloneWithProps(child, props) {
+	  var newProps = mergeProps(props, child.props);
+
+	  if (!hasOwn.call(newProps, 'children') && hasOwn.call(child.props, 'children'))
+	    newProps.children = child.props.children;
+
+	  // < 0.11
+	  if (version[0] === 0 && version[1] < 11)
+	    return child.constructor.ConvenienceConstructor(newProps);
+	  
+	  // 0.11
+	  if (version[0] === 0 && version[1] === 11)
+	    return child.constructor(newProps);
+
+	  // 0.12
+	  else if (version[0] === 0 && version[1] === 12){
+	    MockLegacyFactory.isReactLegacyFactory = true
+	    MockLegacyFactory.type = child.type
+	    return React.createElement(MockLegacyFactory, newProps);
+	  }
+
+	  // 0.13+
+	  return React.createElement(child.type, newProps);
+
+	  function MockLegacyFactory(){}
+	}
+
+	function mergeProps(currentProps, childProps) {
+	  var newProps = extend(currentProps), key
+
+	  for (key in childProps) {
+	    if (hasOwn.call(RESERVED, key) )
+	      RESERVED[key](newProps, childProps[key], key)
+
+	    else if ( !hasOwn.call(newProps, key) )
+	      newProps[key] = childProps[key];
+	  }
+	  return newProps
+	}
+
+	function resolve(fn){
+	  return function(src, value, key){
+	    if( !hasOwn.call(src, key)) src[key] = value
+	    else src[key] = fn(src[key], value)
+	  }
+	}
+
+	function joinClasses(a, b){
+	  if ( !a ) return b || ''
+	  return a + (b ? ' ' + b : '')
+	}
+
+	function extend() {
+	  var target = {};
+	  for (var i = 0; i < arguments.length; i++) 
+	    for (var key in arguments[i]) if (hasOwn.call(arguments[i], key)) 
+	      target[key] = arguments[i][key]   
+	  return target
+	}
+
+/***/ },
 /* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -2867,11 +2867,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	var hasOwn    = __webpack_require__(58)
 	var newify    = __webpack_require__(56)
 
-	var assign      = __webpack_require__(18);
+	var assign      = __webpack_require__(15);
 	var EventEmitter = __webpack_require__(57).EventEmitter
 
-	var inherits = __webpack_require__(38)
-	var VALIDATE = __webpack_require__(39)
+	var inherits = __webpack_require__(37)
+	var VALIDATE = __webpack_require__(38)
 
 	var objectToString = Object.prototype.toString
 
@@ -3910,7 +3910,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	})
 
-	__webpack_require__(40)(REGION)
+	__webpack_require__(39)(REGION)
 
 	module.exports = REGION
 
@@ -4097,13 +4097,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 38 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	module.exports = function(ctor, superCtor) {
@@ -4119,7 +4112,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 39 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4151,13 +4144,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 40 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var hasOwn   = __webpack_require__(58)
-	var VALIDATE = __webpack_require__(39)
+	var VALIDATE = __webpack_require__(38)
 
 	module.exports = function(REGION){
 
@@ -4368,6 +4361,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    REGION.init()
 	}
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 41 */
@@ -5104,7 +5104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 
 	__webpack_require__(65)
 	__webpack_require__(66)
@@ -5413,7 +5413,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 
 	/**
 	 * @static
@@ -5534,7 +5534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 
 	/**
 	 *
@@ -5578,7 +5578,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var ALIGN_TO_NORMALIZED = __webpack_require__(68)
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 
 	/**
 	 * @localdoc Given source and target regions, and the given alignments required, returns a region that is the resulting allignment.
@@ -5657,7 +5657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict'
 
-	var Region = __webpack_require__(15)
+	var Region = __webpack_require__(16)
 
 	/**
 	 *
