@@ -7,7 +7,7 @@
     "test": "make",
     "lib": "./node_modules/.bin/gulp",
     "build-style": "./node_modules/.bin/webpack --colors --progress --config build-style.config.js",
-    "build": "npm run lib && npm run dist && npm run dist.min && npm run build-style",
+    "build": "npm run lib && npm run dist && npm run dist.min",
     "dist": "./node_modules/.bin/webpack --progress --colors --config dist.config.js",
     "dist.min": "./node_modules/.bin/webpack --progress --colors --optimize-minimize --optimize-occurence-order --optimize-dedupe --config dist.min.config.js",
     "serve": "./node_modules/.bin/http-server",
@@ -48,18 +48,19 @@
     "webpack-dev-server": "^1.6.5"
   },
   "dependencies": {
-    "arrow-style": "^1.1.0",
-    "functionally": "^0.6.2",
+    "arrow-style": "^1.1.1",
+    "buffer-function": "^1.0.0",
     "has-touch": "^1.0.1",
-    "normalize.css": "^3.0.2",
     "object-assign": "^2.0.0",
     "point-in-triangle": "^1.0.1",
-    "react": "^0.12.0",
     "react-clonewithprops": "^1.0.1",
     "react-event-names": "^1.0.0",
-    "react-style-normalizer": "^1.1.3",
+    "react-style-normalizer": "^1.2.0",
     "region": "^2.1.2",
-    "region-align": "^2.1.0",
-    "select-parent": "^1.0.0"
+    "region-align": "^2.1.2",
+    "select-parent": "^1.0.1"
+  },
+  "peerDependencies": {
+    "react": ">=0.12.0"
   }
 }

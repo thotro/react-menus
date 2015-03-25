@@ -8,11 +8,18 @@ var Menu  = require('./src')
 var items = []
 
 var i = 0
-var len = 30
+var len = 10
 
 for (; i< len; i++){
     items.push({
         label: 'item ' + (i + 1),
+        // disabled: true,
+        onClick: function(i){
+            debugger
+        },
+        fn: function(){
+            // debugger
+        },
         items: [
             {
                 label: i
@@ -28,7 +35,7 @@ var App = React.createClass({
     },
 
     render: function() {
-        
+
         <Menu cellStyle={{padding: 10 }} at={[100, 100]}>
             <Menu.Item onClick={this.handleItemClick}>
                 <Menu.Item.Cell>first</Menu.Item.Cell>
@@ -113,15 +120,14 @@ var App = React.createClass({
 
         return (
             <div>
-                <Menu maxHeight={300} items={items}  at={[100, 100]}/>
-
+                <Menu onClick={this.handleClick} xmaxHeight={300} items={items} at={[100, 100]}/>
             </div>
 
         )
     },
 
     handleClick: function(itemProps) {
-        console.log('clicked ', arguments)
+        console.log('clicked !!!', arguments)
     }
 })
 

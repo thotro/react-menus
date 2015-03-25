@@ -2,9 +2,9 @@
 
 var React    = require('react')
 var assign   = require('object-assign')
+var buffer   = require('buffer-function')
+
 var Scroller = require('./Scroller')
-var F        = require('functionally')
-var buffer   = F.buffer
 
 function stop(event){
     event.preventDefault()

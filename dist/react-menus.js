@@ -78,12 +78,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	function emptyFn(){}
 
 	var React      = __webpack_require__(5)
-	var assign     = __webpack_require__(15)
-	var Region     = __webpack_require__(16)
-	var inTriangle = __webpack_require__(17)
-	var hasTouch = __webpack_require__(18)
+	var assign     = __webpack_require__(17)
+	var Region     = __webpack_require__(15)
+	var inTriangle = __webpack_require__(18)
+	var hasTouch = __webpack_require__(16)
 
-	var normalize = __webpack_require__(25)
+	var normalize = __webpack_require__(24)
 
 	var getMenuOffset = __webpack_require__(6)
 	var getConstrainRegion = __webpack_require__(14)
@@ -95,6 +95,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var propTypes = __webpack_require__(11)
 	var ScrollContainer = __webpack_require__(12)
 
+	var MenuItem = __webpack_require__(4)
+
 	var MenuClass = React.createClass({
 
 	    displayName: 'Menu',
@@ -105,36 +107,38 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        return {
 	            isMenu: true,
-	            enableScroll: true,
 	            constrainTo: true,
+	            enableScroll: true,
 	            interactionStyles: true,
 	            defaultStyle: {
-	                display : 'inline-block',
+	                display  : 'inline-block',
 	                boxSizing: 'border-box',
-	                position: 'relative',
+	                position : 'relative',
 
 	                //theme props
-	                border: '1px solid rgb(218, 218, 218)',
-	                color: 'rgb(120, 120, 120)'
-	                // ,
-	                // boxShadow: 'rgb(136, 136, 136) 0px 0px 6px'
+	                border: '1px solid rgb(46, 153, 235)'
 	            },
 	            defaultSubMenuStyle: {
 	                position: 'absolute'
 	            },
-	            scrollerProps: {
-	            },
+	            subMenuStyle: null,
+
+
+	            scrollerProps: {},
+
 	            columns: ['label'],
-	            items: null,
+	            items  : null,
 	            visible: true,
-	            subMenuConstrainMargin: 10,
 
 	            defaultItemStyle: {},
 	            itemStyle: {},
+
 	            defaultItemOverStyle: {},
 	            itemOverStyle: {},
+
 	            defaultItemDisabledStyle: {},
 	            itemDisabledStyle: {},
+
 	            defaultItemExpandedStyle: {},
 	            itemExpandedStyle: {},
 
@@ -264,7 +268,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            props.defaultSubMenuStyle:
 	                            null
 
-	        var style = assign({}, props.defaultStyle, subMenuStyle, props.style)
+	        var style = assign({}, props.defaultStyle, subMenuStyle, props.style, props.subMenuStyle)
 
 	        if (!props.visible){
 	            style.display = 'none'
@@ -585,11 +589,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	        event.nativeEvent.expanderClick = true
 	    },
 
-	    onMenuItemClick: function(props, index, event) {
+	    onMenuItemClick: function(event, props, index) {
 
 	        var stopped = event.isPropagationStopped()
 
-	        props.stopClickPropagation && event.stopPropagation()
+	        this.props.stopClickPropagation && event.stopPropagation()
 
 	        if (hasTouch && event && event.nativeEvent && event.nativeEvent.expanderClick){
 
@@ -610,6 +614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	})
 
+	MenuClass.theme = MenuItem.theme
 	module.exports = MenuClass
 
 /***/ },
@@ -619,19 +624,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign =__webpack_require__(15)
-	var arrowStyle =__webpack_require__(19)
-
-	function expanderStyle(){
-	    var style = arrowStyle('right', {
-	        width: 8,
-	        height: 4
-	    })
-
-	    style.display = 'inline-block'
-
-	    return style
-	}
+	var assign =__webpack_require__(17)
 
 	var MenuItemCell = React.createClass({
 
@@ -693,7 +686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(15)
+	var assign = __webpack_require__(17)
 
 	var emptyFn = function(){}
 
@@ -752,16 +745,52 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** @jsx React.DOM */'use strict';
 
-	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(15)
-	var EVENT_NAMES = __webpack_require__(20)
+	var React         = __webpack_require__(5)
+	var assign        = __webpack_require__(17)
+	var normalize     = __webpack_require__(24)
+	var EVENT_NAMES   = __webpack_require__(19)
+
 	var getMenuOffset = __webpack_require__(6)
 
 	var prepareChildren = __webpack_require__(13)
+
 	var Menu = __webpack_require__(1)
 	var MenuItemCell = __webpack_require__(2)
 
 	var emptyFn = function(){}
+
+	function toUpperFirst(s){
+	    return s?
+	            s.charAt(0).toUpperCase() + s.substring(1):
+	            ''
+	}
+
+	var THEME = {
+	    default: {
+	        // overStyle: {
+	        //     background: 'rgb(202, 223, 255)'
+	        // },
+	        overStyle: {
+	                    background: 'linear-gradient(to bottom, rgb(125, 191, 242) 0%, rgb(110, 184, 241) 50%, rgb(117, 188, 242) 100%)',
+	                    color: 'white'
+	                },
+	        activeStyle: {
+	            // background: 'rgb(118, 181, 231)',
+	            //-6 lightness from overStyle
+	            background: ' linear-gradient(to bottom, rgb(106,182,240) 0%,rgb(91,175,239) 50%,rgb(96,178,240) 100%)',
+	            color: 'white'
+	        },
+	        expandedStyle: {
+	            // background: 'rgb(215, 231, 255)',
+	            background: 'linear-gradient(to bottom, rgb(162,210,246) 0%,rgb(151,204,245) 50%,rgb(154,206,246) 100%)',
+	            color: 'white'
+	        },
+	        disabledStyle: {
+	            color : 'gray',
+	            cursor: 'default'
+	        }
+	    }
+	}
 
 	var MenuItem = React.createClass({
 
@@ -775,25 +804,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return {
 	            isMenuItem: true,
 	            interactionStyles: true,
+
 	            defaultStyle: {
-	                cursor: 'pointer',
-	                background: 'white'
+	                cursor    : 'pointer',
+	                userSelect: 'none',
+	                boxSizing : 'border-box'
 	            },
-	            defaultOverStyle: {
-	                background: 'rgb(118, 181, 231)',
-	                color: 'white'
-	            },
-	            defaultActiveStyle: {
-	                background: 'rgb(118, 181, 231)',
-	            },
-	            defaultExpandedStyle: {
-	                background: 'rgb(154, 196, 229)',
-	                color: 'white'
-	            },
-	            defaultDisabledStyle: {
-	                color: 'gray',
-	                cursor: 'default'
-	            },
+
 	            expander: '›'
 	        }
 	    },
@@ -808,6 +825,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var props = {}
 
 	        assign(props, thisProps)
+
+	        props.theme = this.prepareTheme(props)
 
 	        props.mouseOver = !!state.mouseOver
 	        props.active    = !!state.active
@@ -827,6 +846,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return props
 	    },
 
+	    prepareTheme: function(props){
+	        var theme = props.theme
+
+	        if (typeof theme == 'string'){
+	            theme = THEME[theme]
+	        }
+
+	        return theme || THEME.default
+	    },
+
 	    handleClick: function(props, event) {
 
 	        if (props.disabled){
@@ -834,7 +863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return
 	        }
 
-	        ;(this.props.onClick || this.props.fn || emptyFn)(props, props.index, event)
+	        ;(this.props.onClick || this.props.fn || emptyFn)(event, props, props.index)
 	    },
 
 	    handleMouseMove: function(event){
@@ -842,7 +871,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    },
 
 	    handleMouseDown: function(event) {
-	        // event.preventDefault()
 
 	        var mouseUpListener = function(){
 	            this.setState({
@@ -942,36 +970,114 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return className
 	    },
 
-	    prepareStyle: function(props) {
-	        var style = {}
-
-	        assign(style, props.defaultStyle, props.style)
+	    prepareDefaultStyle: function(props){
+	        var defaultStyle = assign({}, props.defaultStyle)
 
 	        if (props.disabled){
-
-	            assign(style, props.defaultDisabledStyle, props.disabledStyle)
-
-	        } else {
-
-	            if (props.interactionStyles){
-	                if (props.expanded){
-	                    assign(style, props.defaultExpandedStyle, props.expandedStyle)
-	                }
-
-	                if (props.mouseOver){
-	                    assign(style, props.defaultOverStyle, props.overStyle)
-	                }
-
-	                if (props.active){
-	                    assign(style, props.defaultActiveStyle, props.activeStyle)
-	                }
-	            }
+	            assign(defaultStyle, props.defaultDisabledStyle)
 	        }
 
-	        return style
+	        return defaultStyle
+	    },
+
+	    prepareComputedStyleNames: function(props){
+	        var names = ['style']
+
+	        if (props.disabled){
+	            names.push('disabledStyle')
+
+	            return names
+	        }
+
+	        if (props.expanded){
+	            names.push('expandedStyle')
+	        }
+
+	        //names is something like ['style','expandedStyle']
+	        //
+	        //now we add over and active styles
+
+	        var overNames
+	        if (props.mouseOver){
+	            overNames = names.map(function(name){
+	                return 'over' + toUpperFirst(name)
+	            })
+	        }
+
+	        var activeNames
+	        if (props.active){
+	            activeNames = names.map(function(name){
+	                return 'active' + toUpperFirst(name)
+	            })
+	        }
+
+	        overNames   && names.push.apply(names, overNames)
+	        activeNames && names.push.apply(names, activeNames)
+
+	        return names
+	    },
+
+	    prepareStyle: function(props) {
+	        var style = assign({}, this.prepareDefaultStyle(props))
+
+	        var styleNames = this.prepareComputedStyleNames(props)
+	        var theme      = props.theme
+
+
+	        if (theme){
+	            //apply default theme first
+	            if (theme != THEME.default){
+	                styleNames.forEach(function(styleName){
+	                    assign(style, THEME.default[styleName])
+	                })
+	            }
+
+	            //then apply theme
+	            styleNames.forEach(function(styleName){
+	                assign(style, theme[styleName])
+	            })
+	        }
+
+	        ;(props.onThemeStyleReady || emptyFn)(style, props)
+
+	        //now apply non-theme
+	        styleNames.forEach(function(styleName){
+	            assign(style, props[styleName])
+	        })
+
+	        ;(props.onStyleReady || emptyFn)(style, props)
+
+	        return normalize(style)
+
+
+	        // assign(style, props.defaultStyle, props.style)
+
+	        // if (props.disabled){
+
+	        //     assign(style, props.defaultDisabledStyle, props.disabledStyle)
+
+	        // } else {
+
+	        //     if (props.interactionStyles){
+	        //         if (props.expanded){
+	        //             assign(style, props.defaultExpandedStyle, props.expandedStyle)
+	        //         }
+
+	        //         if (props.mouseOver){
+	        //             assign(style, props.defaultOverStyle, props.overStyle)
+	        //         }
+
+	        //         if (props.active){
+	        //             assign(style, props.defaultActiveStyle, props.activeStyle)
+	        //         }
+	        //     }
+	        // }
+
+	        // return normalize(style)
 	    }
 	})
 
+	MenuItem.theme = THEME
 	module.exports = MenuItem
 
 /***/ },
@@ -986,8 +1092,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(16)
-	var selectParent = __webpack_require__(26)
+	var Region = __webpack_require__(15)
+	var selectParent = __webpack_require__(25)
 
 	module.exports = function(domNode){
 
@@ -1011,7 +1117,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var assign = __webpack_require__(15)
+	var assign = __webpack_require__(17)
 
 	module.exports = function(props, state){
 
@@ -1038,10 +1144,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** @jsx React.DOM */'use strict';
 
-	var Region           = __webpack_require__(16)
-	var assign           = __webpack_require__(15)
-	var cloneWithProps   = __webpack_require__(28)
-	var getPositionStyle = __webpack_require__(21)
+	var Region           = __webpack_require__(15)
+	var assign           = __webpack_require__(17)
+	var cloneWithProps   = __webpack_require__(26)
+	var getPositionStyle = __webpack_require__(20)
 
 	module.exports = function(props, state) {
 	    var menu = state.menu
@@ -1077,8 +1183,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var React = __webpack_require__(5)
 	var MenuItemCell = __webpack_require__(2)
 
-	var cloneWithProps = __webpack_require__(28)
-	var assign         = __webpack_require__(15)
+	var cloneWithProps = __webpack_require__(26)
+	var assign         = __webpack_require__(17)
 
 	function emptyFn(){}
 
@@ -1141,10 +1247,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            expanded : expandedIndex == index,
 	            children : children,
 	            expander : props.expander,
+	            theme    : props.theme,
 	            onExpanderClick: this.onMenuItemExpanderClick,
-	            onClick  : function(props, index, event){
+	            onClick  : function(event, props, index){
 	                onClick.apply(null, arguments)
-	                this.onMenuItemClick(props, index, event)
+	                this.onMenuItemClick(event, props, index)
 	            }.bind(this)
 	        }, {
 	            style        : itemStyleProps.itemStyle,
@@ -1169,7 +1276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict';
 
 	var React  = __webpack_require__(5)
-	var assign = __webpack_require__(15)
+	var assign = __webpack_require__(17)
 
 	var renderCells     = __webpack_require__(22)
 	var MenuItem        = __webpack_require__(4)
@@ -1241,10 +1348,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	/** @jsx React.DOM */'use strict'
 
 	var React    = __webpack_require__(5)
-	var assign   = __webpack_require__(15)
-	var Scroller = __webpack_require__(23)
-	var F        = __webpack_require__(27)
-	var buffer   = F.buffer
+	var assign   = __webpack_require__(17)
+	var buffer   = __webpack_require__(27)
+
+	var Scroller = __webpack_require__(21)
 
 	function stop(event){
 	    event.preventDefault()
@@ -1488,10 +1595,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	/** @jsx React.DOM */'use strict';
 
+	var React        = __webpack_require__(5)
 	var Menu         = __webpack_require__(1)
 	var MenuItemCell = __webpack_require__(2)
-	var renderCell   = __webpack_require__(24)
-	var cloneWithProps = __webpack_require__(28)
+	var renderCell   = __webpack_require__(23)
+	var cloneWithProps = __webpack_require__(26)
 
 	module.exports = function(props) {
 
@@ -1540,8 +1648,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var Region = __webpack_require__(16)
-	var selectParent = __webpack_require__(26)
+	var Region = __webpack_require__(15)
+	var selectParent = __webpack_require__(25)
 
 	module.exports = function(constrainTo){
 	    var constrainRegion
@@ -1564,6 +1672,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(28)
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1595,13 +1716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(29)
-
-/***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//http://www.blackpawn.com/texts/pointinpoly/
@@ -1627,70 +1742,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = function arrowStyle(side, config){
-
-	    var arrowSize   = config.size   || 8
-	    var arrowWidth  = config.width  || arrowSize
-	    var arrowHeight = config.height || arrowSize
-	    var arrowColor  = config.color  || 'black'
-	    var includePosition = config.includePosition
-
-	    var style
-
-	    if (side == 'up' || side == 'down'){
-
-	        style = {
-	            borderLeft : arrowWidth + 'px solid transparent',
-	            borderRight: arrowWidth + 'px solid transparent'
-	        }
-
-	        if (includePosition){
-	            style.marginTop = -Math.round(arrowHeight/2) + 'px'
-	            style.position  = 'relative'
-	            style.top       = '50%'
-	        }
-
-	        style[side === 'up'? 'borderBottom': 'borderTop'] = arrowHeight + 'px solid ' + arrowColor
-	    }
-
-	    if (side == 'left' || side == 'right'){
-
-	        style = {
-	            borderTop : arrowHeight + 'px solid transparent',
-	            borderBottom: arrowHeight + 'px solid transparent'
-	        }
-
-	        if (includePosition){
-	            style.marginLeft = -Math.round(arrowWidth/2) + 'px'
-	            style.position   = 'relative'
-	            style.left       = '50%'
-	        }
-
-	        style[side === 'left'? 'borderRight': 'borderLeft'] = arrowWidth + 'px solid ' + arrowColor
-	    }
-
-	    return style
-	}
-
-/***/ },
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(40)?
+	module.exports = __webpack_require__(37)?
 		{
 			onMouseDown: 'onTouchStart',
 			onMouseUp  : 'onTouchEnd',
@@ -1703,14 +1760,14 @@ return /******/ (function(modules) { // webpackBootstrap
 		}
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Region = __webpack_require__(16)
-	var assign = __webpack_require__(15)
-	var align  = __webpack_require__(34)
+	var Region = __webpack_require__(15)
+	var assign = __webpack_require__(17)
+	var align  = __webpack_require__(33)
 
 	module.exports = function getPositionStyle(props, state){
 	    if (!state.menu || !this.isMounted()){
@@ -1817,26 +1874,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/** @jsx React.DOM */'use strict';
-
-	var renderCell = __webpack_require__(24)
-
-	module.exports = function(props) {
-	    return props.columns.map(renderCell.bind(null, props))
-	}
-
-/***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */'use strict';
 
 	var React         = __webpack_require__(5)
-	var assign        = __webpack_require__(15)
-	var getArrowStyle = __webpack_require__(19)
+	var assign        = __webpack_require__(17)
+	var getArrowStyle = __webpack_require__(36)
 
 	function emptyFn(){}
 
@@ -2034,12 +2079,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Scroller
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */'use strict';
 
-	var assign = __webpack_require__(15)
+	var renderCell = __webpack_require__(23)
+
+	module.exports = function(props) {
+	    return props.columns.map(renderCell.bind(null, props))
+	}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */'use strict';
+
+	var React        = __webpack_require__(5)
+	var assign       = __webpack_require__(17)
 	var MenuItemCell = __webpack_require__(2)
 
 	module.exports = function(props, column) {
@@ -2049,16 +2107,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var hasOwn      = __webpack_require__(30)
-	var getPrefixed = __webpack_require__(31)
+	var hasOwn      = __webpack_require__(29)
+	var getPrefixed = __webpack_require__(30)
 
-	var map      = __webpack_require__(32)
-	var plugable = __webpack_require__(33)
+	var map      = __webpack_require__(31)
+	var plugable = __webpack_require__(32)
 
 	function plugins(key, value){
 
@@ -2096,6 +2154,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var RESULT = function(style){
+
 		var k
 		var item
 		var result = {}
@@ -2118,15 +2177,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = plugable(RESULT)
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var curry   = __webpack_require__(35)
-	var matches = __webpack_require__(36)
+	var curry   = __webpack_require__(34)
+	var matches
 
 	module.exports = curry(function(selector, node){
+
+		matches = matches || __webpack_require__(35)
+
 	    while (node = node.parentElement){
 	        if (matches.call(node, selector)){
 	            return node
@@ -2135,655 +2197,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	})
 
 /***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	    var setImmediate = function(fn){
-	        setTimeout(fn, 0)
-	    }
-	    var clearImmediate = clearTimeout
-	    /**
-	     * Utility methods for working with functions.
-	     * These methods augment the Function prototype.
-	     *
-	     * Using {@link #before}
-	     *
-	     *      function log(m){
-	     *          console.log(m)
-	     *      }
-	     *
-	     *      var doLog = function (m){
-	     *          console.log('LOG ')
-	     *      }.before(log)
-	     *
-	     *      doLog('test')
-	     *      //will log
-	     *      //"LOG "
-	     *      //and then
-	     *      //"test"
-	     *
-	     *
-	     *
-	     * Using {@link #bindArgs}:
-	     *
-	     *      //returns the sum of all arguments
-	     *      function add(){
-	     *          var sum = 0
-	     *          [].from(arguments).forEach(function(n){
-	     *              sum += n
-	     *          })
-	     *
-	     *          return sum
-	     *      }
-	     *
-	     *      var add1 = add.bindArgs(1)
-	     *
-	     *      add1(2, 3) == 6
-	     *
-	     * Using {@link #lockArgs}:
-	     *
-	     *      function add(){
-	     *          var sum = 0
-	     *          [].from(arguments).forEach(function(n){
-	     *              sum += n
-	     *          })
-	     *
-	     *          return sum
-	     *      }
-	     *
-	     *      var add1_2   = add.lockArgs(1,2)
-	     *      var add1_2_3 = add.lockArgs(1,2,3)
-	     *
-	     *      add1_2(3,4)  == 3 //args are locked to only be 1 and 2
-	     *      add1_2_3(6)  == 6 //args are locked to only be 1, 2 and 3
-	     *
-	     *
-	     *
-	     * Using {@link #compose}:
-	     *
-	     *      function multiply(a,b){
-	     *          return a* b
-	     *      }
-	     *
-	     *      var multiply2 = multiply.curry()(2)
-	     *
-	     *      Function.compose(multiply2( add(5,6) )) == multiply2( add(5,6) )
-	     *
-	     *
-	     * @class Function
-	     */
-
-	    var SLICE = Array.prototype.slice
-
-	    var curry = __webpack_require__(41),
-
-	        findFn = function(fn, target, onFound){
-	            // if (typeof target.find == 'function'){
-	            //     return target.find(fn)
-	            // }
-
-	            onFound = typeof onFound == 'function'?
-	                        onFound:
-	                        function(found, key, target){
-	                            return found
-	                        }
-
-	            if (Array.isArray(target)){
-	                var i   = 0
-	                var len = target.length
-	                var it
-
-	                for(; i < len; i++){
-	                    it = target[i]
-	                    if (fn(it, i, target)){
-	                        return onFound(it, i, target)
-	                    }
-	                }
-
-	                return
-	            }
-
-	            if (typeof target == 'object'){
-	                var keys = Object.keys(target)
-	                var i = 0
-	                var len = keys.length
-	                var k
-	                var it
-
-	                for( ; i < len; i++){
-	                    k  = keys[i]
-	                    it = target[k]
-
-	                    if (fn(it, k, target)){
-	                        return onFound(it, k, target)
-	                    }
-	                }
-	            }
-	        },
-
-	        find = curry(findFn, 2),
-
-	        findIndex = curry(function(fn, target){
-	            return findFn(fn, target, function(it, i){
-	                return i
-	            })
-	        }),
-
-	        bindFunctionsOf = function(obj) {
-	            Object.keys(obj).forEach(function(k){
-	                if (typeof obj[k] == 'function'){
-	                    obj[k] = obj[k].bind(obj)
-	                }
-	            })
-
-	            return obj
-	        },
-
-	        /*
-	         * @param {Function...} an enumeration of functions, each consuming the result of the following function.
-	         *
-	         * For example: compose(c, b, a)(1,4) == c(b(a(1,4)))
-	         *
-	         * @return the result of the first function in the enumeration
-	         */
-	        compose = __webpack_require__(42),
-
-	        chain = __webpack_require__(43),
-
-	        once = __webpack_require__(44),
-
-	        bindArgsArray = __webpack_require__(45),
-
-	        bindArgs = __webpack_require__(46),
-
-	        lockArgsArray = __webpack_require__(47),
-
-	        lockArgs = __webpack_require__(48),
-
-	        skipArgs = function(fn, count){
-	            return function(){
-	                var args = SLICE.call(arguments, count || 0)
-
-	                return fn.apply(this, args)
-	            }
-	        },
-
-	        intercept = function(interceptedFn, interceptingFn, withStopArg){
-
-	            return function(){
-	                var args    = [].from(arguments),
-	                    stopArg = { stop: false }
-
-	                if (withStopArg){
-	                    args.push(stopArg)
-	                }
-
-	                var result = interceptingFn.apply(this, args)
-
-	                if (withStopArg){
-	                    if (stopArg.stop === true){
-	                        return result
-	                    }
-
-	                } else {
-	                    if (result === false){
-	                        return result
-	                    }
-	                }
-
-	                //the interception was not stopped
-	                return interceptedFn.apply(this, arguments)
-	            }
-
-	        },
-
-	        delay = function(fn, delay, scope){
-
-	            var delayIsNumber = delay * 1 == delay
-
-	            if (arguments.length == 2 && !delayIsNumber){
-	                scope = delay
-	                delay = 0
-	            } else {
-	                if (!delayIsNumber){
-	                    delay = 0
-	                }
-	            }
-
-	            return function(){
-	                var self = scope || this,
-	                    args = arguments
-
-	                if (delay < 0){
-	                    fn.apply(self, args)
-	                    return
-	                }
-
-	                if (delay || !setImmediate){
-	                    setTimeout(function(){
-	                        fn.apply(self, args)
-	                    }, delay)
-
-	                } else {
-	                    setImmediate(function(){
-	                        fn.apply(self, args)
-	                    })
-	                }
-	            }
-	        },
-
-	        defer = function(fn, scope){
-	            return delay(fn, 0, scope)
-	        },
-
-	        buffer = function(fn, delay, scope){
-
-	            var timeoutId = -1
-
-	            return function(){
-
-	                var self = scope || this,
-	                    args = arguments
-
-	                if (delay < 0){
-	                    fn.apply(self, args)
-	                    return
-	                }
-
-	                var withTimeout = delay || !setImmediate,
-	                    clearFn = withTimeout?
-	                                clearTimeout:
-	                                clearImmediate,
-	                    setFn   = withTimeout?
-	                                setTimeout:
-	                                setImmediate
-
-	                if (timeoutId !== -1){
-	                    clearFn(timeoutId)
-	                }
-
-	                timeoutId = setFn(function(){
-	                    fn.apply(self, args)
-	                    self = null
-	                }, delay)
-
-	            }
-
-	        },
-
-	        throttle = function(fn, delay, scope) {
-	            var timeoutId = -1,
-	                self,
-	                args
-
-	            return function () {
-
-	                self = scope || this
-	                args = arguments
-
-	                if (timeoutId !== -1) {
-	                    //the function was called once again in the delay interval
-	                } else {
-	                    timeoutId = setTimeout(function () {
-	                        fn.apply(self, args)
-
-	                        self = null
-	                        timeoutId = -1
-	                    }, delay)
-	                }
-
-	            }
-
-	        },
-
-	        spread = function(fn, delay, scope){
-
-	            var timeoutId       = -1
-	            var callCount       = 0
-	            var executeCount    = 0
-	            var nextArgs        = {}
-	            var increaseCounter = true
-	            var resultingFnUnbound
-	            var resultingFn
-
-	            resultingFn = resultingFnUnbound = function(){
-
-	                var args = arguments,
-	                    self = scope || this
-
-	                if (increaseCounter){
-	                    nextArgs[callCount++] = {args: args, scope: self}
-	                }
-
-	                if (timeoutId !== -1){
-	                    //the function was called once again in the delay interval
-	                } else {
-	                    timeoutId = setTimeout(function(){
-	                        fn.apply(self, args)
-
-	                        timeoutId = -1
-	                        executeCount++
-
-	                        if (callCount !== executeCount){
-	                            resultingFn = bindArgsArray(resultingFnUnbound, nextArgs[executeCount].args).bind(nextArgs[executeCount].scope)
-	                            delete nextArgs[executeCount]
-
-	                            increaseCounter = false
-	                            resultingFn.apply(self)
-	                            increaseCounter = true
-	                        } else {
-	                            nextArgs = {}
-	                        }
-	                    }, delay)
-	                }
-
-	            }
-
-	            return resultingFn
-	        },
-
-	        /*
-	         * @param {Array} args the array for which to create a cache key
-	         * @param {Number} [cacheParamNumber] the number of args to use for the cache key. Use this to limit the args that area actually used for the cache key
-	         */
-	        getCacheKey = function(args, cacheParamNumber){
-	            if (cacheParamNumber == null){
-	                cacheParamNumber = -1
-	            }
-
-	            var i        = 0,
-	                len      = Math.min(args.length, cacheParamNumber),
-	                cacheKey = [],
-	                it
-
-	            for ( ; i < len; i++){
-	                it = args[i]
-
-	                if (root.check.isPlainObject(it) || Array.isArray(it)){
-	                    cacheKey.push(JSON.stringify(it))
-	                } else {
-	                    cacheKey.push(String(it))
-	                }
-	            }
-
-	            return cacheKey.join(', ')
-	        },
-
-	        /*
-	         * @param {Function} fn - the function to cache results for
-	         * @param {Number} skipCacheParamNumber - the index of the boolean parameter that makes this function skip the caching and
-	         * actually return computed results.
-	         * @param {Function|String} cacheBucketMethod - a function or the name of a method on this object which makes caching distributed across multiple buckets.
-	         * If given, cached results will be searched into the cache corresponding to this bucket. If no result found, return computed result.
-	         *
-	         * For example this param is very useful when a function from a prototype is cached,
-	         * but we want to return the same cached results only for one object that inherits that proto, not for all objects. Thus, for example for Wes.Element,
-	         * we use the 'getId' cacheBucketMethod to indicate cached results for one object only.
-	         * @param {Function} [cacheKeyBuilder] A function to be used to compose the cache key
-	         *
-	         * @return {Function} a new function, which returns results from cache, if they are available, otherwise uses the given fn to compute the results.
-	         * This returned function has a 'clearCache' function attached, which clears the caching. If a parameter ( a bucket id) is  provided,
-	         * only clears the cache in the specified cache bucket.
-	         */
-	        cache = function(fn, config){
-	            config = config || {}
-
-	            var bucketCache = {},
-	                cache       = {},
-	                skipCacheParamNumber = config.skipCacheIndex,
-	                cacheBucketMethod    = config.cacheBucket,
-	                cacheKeyBuilder      = config.cacheKey,
-	                cacheArgsLength      = skipCacheParamNumber == null?
-	                                            fn.length:
-	                                            skipCacheParamNumber,
-	                cachingFn
-
-	            cachingFn = function(){
-	                var result,
-	                    skipCache = skipCacheParamNumber != null?
-	                                                arguments[skipCacheParamNumber] === true:
-	                                                false,
-	                    args = skipCache?
-	                                    SLICE.call(arguments, 0, cacheArgsLength):
-	                                    SLICE.call(arguments),
-
-	                    cacheBucketId = cacheBucketMethod != null?
-	                                        typeof cacheBucketMethod == 'function'?
-	                                            cacheBucketMethod():
-	                                            typeof this[cacheBucketMethod] == 'function'?
-	                                                this[cacheBucketMethod]():
-	                                                null
-	                                        :
-	                                        null,
-
-
-	                    cacheObject = cacheBucketId?
-	                                        bucketCache[cacheBucketId]:
-	                                        cache,
-
-	                    cacheKey = (cacheKeyBuilder || getCacheKey)(args, cacheArgsLength)
-
-	                if (cacheBucketId && !cacheObject){
-	                    cacheObject = bucketCache[cacheBucketId] = {}
-	                }
-
-	                if (skipCache || cacheObject[cacheKey] == null){
-	                    cacheObject[cacheKey] = result = fn.apply(this, args)
-	                } else {
-	                    result = cacheObject[cacheKey]
-	                }
-
-	                return result
-	            }
-
-	            /*
-	             * @param {String|Object|Number} [bucketId] the bucket for which to clear the cache. If none given, clears all the cache for this function.
-	             */
-	            cachingFn.clearCache = function(bucketId){
-	                if (bucketId){
-	                    delete bucketCache[String(bucketId)]
-	                } else {
-	                    cache = {}
-	                    bucketCache = {}
-	                }
-	            }
-
-	            /*
-	             *
-	             * @param {Array} cacheArgs The array of objects from which to create the cache key
-	             * @param {Number} [cacheParamNumber] A limit for the cache args that are actually used to compute the cache key.
-	             * @param {Function} [cacheKeyBuilder] The function to be used to compute the cache key from the given cacheArgs and cacheParamNumber
-	             */
-	            cachingFn.getCache = function(cacheArgs, cacheParamNumber, cacheKeyBuilder){
-	                return cachingFn.getBucketCache(null, cacheArgs, cacheParamNumber, cacheKeyBuilder)
-	            }
-
-	            /*
-	             *
-	             * @param {String} bucketId The id of the cache bucket from which to retrieve the cached value
-	             * @param {Array} cacheArgs The array of objects from which to create the cache key
-	             * @param {Number} [cacheParamNumber] A limit for the cache args that are actually used to compute the cache key.
-	             * @param {Function} [cacheKeyBuilder] The function to be used to compute the cache key from the given cacheArgs and cacheParamNumber
-	             */
-	            cachingFn.getBucketCache = function(bucketId, cacheArgs, cacheParamNumber, cacheKeyBuilder){
-	                var cacheObject = cache,
-	                    cacheKey = (cacheKeyBuilder || getCacheKey)(cacheArgs, cacheParamNumber)
-
-	                if (bucketId){
-	                    bucketId = String(bucketId);
-
-	                    cacheObject = bucketCache[bucketId] = bucketCache[bucketId] || {}
-	                }
-
-	                return cacheObject[cacheKey]
-	            }
-
-	            /*
-	             *
-	             * @param {Object} value The value to set in the cache
-	             * @param {Array} cacheArgs The array of objects from which to create the cache key
-	             * @param {Number} [cacheParamNumber] A limit for the cache args that are actually used to compute the cache key.
-	             * @param {Function} [cacheKeyBuilder] The function to be used to compute the cache key from the given cacheArgs and cacheParamNumber
-	             */
-	            cachingFn.setCache = function(value, cacheArgs, cacheParamNumber, cacheKeyBuilder){
-	                return cachingFn.setBucketCache(null, value, cacheArgs, cacheParamNumber, cacheKeyBuilder)
-	            }
-
-	            /*
-	             *
-	             * @param {String} bucketId The id of the cache bucket for which to set the cache value
-	             * @param {Object} value The value to set in the cache
-	             * @param {Array} cacheArgs The array of objects from which to create the cache key
-	             * @param {Number} [cacheParamNumber] A limit for the cache args that are actually used to compute the cache key.
-	             * @param {Function} [cacheKeyBuilder] The function to be used to compute the cache key from the given cacheArgs and cacheParamNumber
-	             */
-	            cachingFn.setBucketCache = function(bucketId, value, cacheArgs, cacheParamNumber, cacheKeyBuilder){
-
-	                var cacheObject = cache,
-	                    cacheKey = (cacheKeyBuilder || getCacheKey)(cacheArgs, cacheParamNumber)
-
-	                if (bucketId){
-	                    bucketId = String(bucketId)
-
-	                    cacheObject = bucketCache[bucketId] = bucketCache[bucketId] || {};
-	                }
-
-	                return cacheObject[cacheKey] = value
-	            }
-
-	            return cachingFn
-	        }
-
-	module.exports = {
-
-	    map: __webpack_require__(49),
-
-	    dot: __webpack_require__(50),
-
-	    maxArgs: __webpack_require__(51),
-
-	    /**
-	     * @method compose
-	     *
-	     * Example:
-	     *
-	     *      zippy.Function.compose(c, b, a)
-	     *
-	     * See {@link Function#compose}
-	     */
-	    compose: compose,
-
-	    /**
-	     * See {@link Function#self}
-	     */
-	    self: function(fn){
-	        return fn
-	    },
-
-	    /**
-	     * See {@link Function#buffer}
-	     */
-	    buffer: buffer,
-
-	    /**
-	     * See {@link Function#delay}
-	     */
-	    delay: delay,
-
-	    /**
-	     * See {@link Function#defer}
-	     * @param {Function} fn
-	     * @param {Object} scope
-	     */
-	    defer:defer,
-
-	    /**
-	     * See {@link Function#skipArgs}
-	     * @param {Function} fn
-	     * @param {Number} [count=0] how many args to skip when calling the resulting function
-	     * @return {Function} The function that will call the original fn without the first count args.
-	     */
-	    skipArgs: skipArgs,
-
-	    /**
-	     * See {@link Function#intercept}
-	     */
-	    intercept: function(fn, interceptedFn, withStopArgs){
-	        return intercept(interceptedFn, fn, withStopArgs)
-	    },
-
-	    /**
-	     * See {@link Function#throttle}
-	     */
-	    throttle: throttle,
-
-	    /**
-	     * See {@link Function#spread}
-	     */
-	    spread: spread,
-
-	    /**
-	     * See {@link Function#chain}
-	     */
-	    chain: function(fn, where, mainFn){
-	        return chain(where, mainFn, fn)
-	    },
-
-	    /**
-	     * See {@link Function#before}
-	     */
-	    before: function(fn, otherFn){
-	        return chain('before', otherFn, fn)
-	    },
-
-	    /**
-	     * See {@link Function#after}
-	     */
-	    after: function(fn, otherFn){
-	        return chain('after', otherFn, fn)
-	    },
-
-	    /**
-	     * See {@link Function#curry}
-	     */
-	    curry: curry,
-
-	    /**
-	     * See {@link Function#once}
-	     */
-	    once: once,
-
-	    /**
-	     * See {@link Function#bindArgs}
-	     */
-	    bindArgs: bindArgs,
-
-	    /**
-	     * See {@link Function#bindArgsArray}
-	     */
-	    bindArgsArray: bindArgsArray,
-
-	    /**
-	     * See {@link Function#lockArgs}
-	     */
-	    lockArgs: lockArgs,
-
-	    /**
-	     * See {@link Function#lockArgsArray}
-	     */
-	    lockArgsArray: lockArgsArray,
-
-	    bindFunctionsOf: bindFunctionsOf,
-
-	    find: find,
-
-	    findIndex: findIndex,
-
-	    newify: __webpack_require__(52)
-	}
-
-/***/ },
-/* 28 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2859,19 +2273,62 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 29 */
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var setImmediate   = global.setImmediate
+	var clearImmediate = global.clearImmediate
+
+	module.exports = function(fn, delay, scope){
+
+	    var timeoutId = -1
+
+	    return function(){
+
+	        var self = scope || this
+	        var args = arguments
+
+	        if (delay < 0){
+	            fn.apply(self, args)
+	            return
+	        }
+
+	        var withTimeout = delay || !setImmediate
+	        var clearFn = withTimeout?
+	                        clearTimeout:
+	                        clearImmediate
+	        var setFn   = withTimeout?
+	                        setTimeout:
+	                        setImmediate
+
+	        if (timeoutId !== -1){
+	            clearFn(timeoutId)
+	        }
+
+	        timeoutId = setFn(function(){
+	            fn.apply(self, args)
+	            self = null
+	        }, delay)
+	    }
+	}
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var hasOwn    = __webpack_require__(58)
-	var newify    = __webpack_require__(56)
+	var hasOwn    = __webpack_require__(46)
+	var newify    = __webpack_require__(44)
 
-	var assign      = __webpack_require__(15);
-	var EventEmitter = __webpack_require__(57).EventEmitter
+	var assign      = __webpack_require__(17);
+	var EventEmitter = __webpack_require__(45).EventEmitter
 
-	var inherits = __webpack_require__(37)
-	var VALIDATE = __webpack_require__(38)
+	var inherits = __webpack_require__(38)
+	var VALIDATE = __webpack_require__(39)
 
 	var objectToString = Object.prototype.toString
 
@@ -3910,12 +3367,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	})
 
-	__webpack_require__(39)(REGION)
+	__webpack_require__(40)(REGION)
 
 	module.exports = REGION
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3926,13 +3383,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getStylePrefixed = __webpack_require__(53)
-	var properties       = __webpack_require__(54)
+	var getStylePrefixed = __webpack_require__(41)
+	var properties       = __webpack_require__(42)
 
 	module.exports = function(key, value){
 
@@ -3944,7 +3401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3965,12 +3422,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getCssPrefixedValue = __webpack_require__(55)
+	var getCssPrefixedValue = __webpack_require__(43)
 
 	module.exports = function(target){
 		target.plugins = target.plugins || [
@@ -4001,12 +3458,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Region = __webpack_require__(59)
+	var Region = __webpack_require__(47)
 	var getConstrainRegion = __webpack_require__(14)
 
 	module.exports = function(props, subMenuRegion, targetAlignRegion, constrainTo){
@@ -4039,7 +3496,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4077,7 +3534,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = curry
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4094,7 +3551,65 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = function arrowStyle(side, config){
+
+	    var arrowSize   = config.size   || 8
+	    var arrowWidth  = config.width  || arrowSize
+	    var arrowHeight = config.height || arrowSize
+	    var arrowColor  = config.color  || 'black'
+	    var includePosition = config.includePosition
+
+	    var style
+
+	    if (side == 'up' || side == 'down'){
+
+	        style = {
+	            borderLeft : arrowWidth + 'px solid transparent',
+	            borderRight: arrowWidth + 'px solid transparent'
+	        }
+
+	        if (includePosition){
+	            style.marginTop = -Math.round(arrowHeight/2) + 'px'
+	            style.position  = 'relative'
+	            style.top       = '50%'
+	        }
+
+	        style[side === 'up'? 'borderBottom': 'borderTop'] = arrowHeight + 'px solid ' + arrowColor
+	    }
+
+	    if (side == 'left' || side == 'right'){
+
+	        style = {
+	            borderTop : arrowHeight + 'px solid transparent',
+	            borderBottom: arrowHeight + 'px solid transparent'
+	        }
+
+	        if (includePosition){
+	            style.marginLeft = -Math.round(arrowWidth/2) + 'px'
+	            style.position   = 'relative'
+	            style.left       = '50%'
+	        }
+
+	        style[side === 'left'? 'borderRight': 'borderLeft'] = arrowWidth + 'px solid ' + arrowColor
+	    }
+
+	    return style
+	}
+
+/***/ },
 /* 37 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4112,7 +3627,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4144,13 +3659,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var hasOwn   = __webpack_require__(58)
-	var VALIDATE = __webpack_require__(38)
+	var hasOwn   = __webpack_require__(46)
+	var VALIDATE = __webpack_require__(39)
 
 	module.exports = function(REGION){
 
@@ -4363,263 +3878,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = 'ontouchstart' in global || (global.DocumentTouch && document instanceof DocumentTouch)
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	function curry(fn, n){
-
-	    if (typeof n !== 'number'){
-	        n = fn.length
-	    }
-
-	    function getCurryClosure(prevArgs){
-
-	        function curryClosure() {
-
-	            var len  = arguments.length
-	            var args = [].concat(prevArgs)
-
-	            if (len){
-	                args.push.apply(args, arguments)
-	            }
-
-	            if (args.length < n){
-	                return getCurryClosure(args)
-	            }
-
-	            return fn.apply(this, args)
-	        }
-
-	        return curryClosure
-	    }
-
-	    return getCurryClosure([])
-	}
-
-	module.exports = curry
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	function composeTwo(f, g) {
-	    return function () {
-	        return f(g.apply(this, arguments))
-	    }
-	}
-
-	/*
-	 * @param {Function...} an enumeration of functions, each consuming the result of the following function.
-	 *
-	 * For example: compose(c, b, a)(1,4) == c(b(a(1,4)))
-	 *
-	 * @return the result of the first function in the enumeration
-	 */
-	module.exports = function(){
-
-	    var args = arguments
-	    var len  = args.length
-	    var i    = 0
-	    var f    = args[0]
-
-	    while (++i < len) {
-	        f = composeTwo(f, args[i])
-	    }
-
-	    return f
-	}
-
-/***/ },
-/* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	function chain(where, fn, secondFn){
-
-	    return function(){
-	        if (where === 'before'){
-	            secondFn.apply(this, arguments)
-	        }
-
-	        var result = fn.apply(this, arguments)
-
-	        if (where !== 'before'){
-	            secondFn.apply(this, arguments)
-	        }
-
-	        return result
-	    }
-	}
-
-	module.exports = chain
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use once'
-
-	function once(fn, scope){
-
-	    var called
-	    var result
-
-	    return function(){
-	        if (called){
-	            return result
-	        }
-
-	        called = true
-
-	        return result = fn.apply(scope || this, arguments)
-	    }
-	}
-
-	module.exports = once
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var SLICE = Array.prototype.slice
-
-	module.exports = function(fn, args){
-	    return function(){
-	        var thisArgs = SLICE.call(args || [])
-
-	        if (arguments.length){
-	            thisArgs.push.apply(thisArgs, arguments)
-	        }
-
-	        return fn.apply(this, thisArgs)
-	    }
-	}
-
-/***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var SLICE = Array.prototype.slice
-	var bindArgsArray = __webpack_require__(45)
-
-	module.exports = function(fn){
-	    return bindArgsArray(fn, SLICE.call(arguments,1))
-	}
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var SLICE = Array.prototype.slice
-
-	module.exports = function(fn, args){
-
-	    return function(){
-	        if (!Array.isArray(args)){
-	            args = SLICE.call(args || [])
-	        }
-
-	        return fn.apply(this, args)
-	    }
-	}
-
-/***/ },
-/* 48 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var SLICE = Array.prototype.slice
-	var lockArgsArray = __webpack_require__(47)
-
-	module.exports = function(fn){
-	    return lockArgsArray(fn, SLICE.call(arguments, 1))
-	}
-
-/***/ },
-/* 49 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var curry = __webpack_require__(41)
-
-	module.exports = curry(function(fn, value){
-	    return value != undefined && typeof value.map?
-	            value.map(fn):
-	            fn(value)
-	})
-
-/***/ },
-/* 50 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var curry = __webpack_require__(41)
-
-	module.exports = curry(function(prop, value){
-	    return value != undefined? value[prop]: undefined
-	})
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var SLICE = Array.prototype.slice
-	var curry = __webpack_require__(41)
-
-	module.exports = function(fn, count){
-	    return function(){
-	        return fn.apply(this, SLICE.call(arguments, 0, count))
-	    }
-	}
-
-/***/ },
-/* 52 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict'
-
-	var newify = __webpack_require__(56)
-	var curry  = __webpack_require__(41)
-
-	module.exports = curry(newify)
-
-/***/ },
-/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var toUpperFirst = __webpack_require__(60)
-	var getPrefix    = __webpack_require__(61)
-	var el           = __webpack_require__(62)
+	var toUpperFirst = __webpack_require__(48)
+	var getPrefix    = __webpack_require__(49)
+	var el           = __webpack_require__(50)
 
 	var MEMORY = {}
-	var STYLE = el.style
+	var STYLE
+	var ELEMENT
 
 	module.exports = function(key, value){
+
+	    ELEMENT = ELEMENT || el()
+	    STYLE   = STYLE   || ELEMENT.style
 
 	    var k = key// + ': ' + value
 
@@ -4649,7 +3924,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 54 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4689,19 +3964,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 55 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getPrefix     = __webpack_require__(61)
-	var forcePrefixed = __webpack_require__(63)
-	var el            = __webpack_require__(62)
+	var getPrefix     = __webpack_require__(49)
+	var forcePrefixed = __webpack_require__(51)
+	var el            = __webpack_require__(50)
 
 	var MEMORY = {}
-	var STYLE = el.style
+	var STYLE
+	var ELEMENT
 
 	module.exports = function(key, value){
+
+	    ELEMENT = ELEMENT || el()
+	    STYLE   = STYLE   ||  ELEMENT.style
 
 	    var k = key + ': ' + value
 
@@ -4723,10 +4002,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            prefixedValue = '-' + prefix.toLowerCase() + '-' + value
 
 	            if (prefixed in STYLE){
-	                el.style[prefixed] = ''
-	                el.style[prefixed] = prefixedValue
+	                ELEMENT.style[prefixed] = ''
+	                ELEMENT.style[prefixed] = prefixedValue
 
-	                if (el.style[prefixed] !== ''){
+	                if (ELEMENT.style[prefixed] !== ''){
 	                    value = prefixedValue
 	                }
 	            }
@@ -4739,17 +4018,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 56 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getInstantiatorFunction = __webpack_require__(64)
+	var getInstantiatorFunction = __webpack_require__(52)
 
 	module.exports = function(fn, args){
 		return getInstantiatorFunction(args.length)(fn, args)
 	}
 
 /***/ },
-/* 57 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -5056,7 +4335,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 58 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
@@ -5099,17 +4378,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	})
 
 /***/ },
-/* 59 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Region = __webpack_require__(16)
+	var Region = __webpack_require__(15)
 
-	__webpack_require__(65)
-	__webpack_require__(66)
+	__webpack_require__(53)
+	__webpack_require__(54)
 
-	var COMPUTE_ALIGN_REGION = __webpack_require__(67)
+	var COMPUTE_ALIGN_REGION = __webpack_require__(55)
 
 	/**
 	 * region-align module exposes methods for aligning {@link Element} and {@link Region} instances
@@ -5285,7 +4564,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = Region
 
 /***/ },
-/* 60 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5297,23 +4576,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 61 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var toUpperFirst = __webpack_require__(60)
+	var toUpperFirst = __webpack_require__(48)
 	var prefixes     = ["ms", "Moz", "Webkit", "O"]
 
-	var el = __webpack_require__(62)
+	var el = __webpack_require__(50)
 
+	var ELEMENT
 	var PREFIX
 
 	module.exports = function(key){
 
-		if (PREFIX){
+		if (PREFIX !== undefined){
 			return PREFIX
 		}
+
+		ELEMENT = ELEMENT || el()
 
 		var i = 0
 		var len = prefixes.length
@@ -5324,36 +4606,45 @@ return /******/ (function(modules) { // webpackBootstrap
 			prefix = prefixes[i]
 			tmp = prefix + toUpperFirst(key)
 
-			if (typeof el.style[tmp] != 'undefined'){
+			if (typeof ELEMENT.style[tmp] != 'undefined'){
 				return PREFIX = prefix
 			}
 		}
+
+		return PREFIX
 	}
 
 /***/ },
-/* 62 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
 
 	var el
 
-	if(!!global.document){
-	  	el = global.document.createElement('div')
-	}
+	module.exports = function(){
 
-	module.exports = el
+		if(!el && !!global.document){
+		  	el = global.document.createElement('div')
+		}
+
+		if (!el){
+			el = {style: {}}
+		}
+
+		return el
+	}
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 63 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var toUpperFirst = __webpack_require__(60)
-	var getPrefix    = __webpack_require__(61)
-	var properties   = __webpack_require__(54)
+	var toUpperFirst = __webpack_require__(48)
+	var getPrefix    = __webpack_require__(49)
+	var properties   = __webpack_require__(42)
 
 	/**
 	 * Returns the given key prefixed, if the property is found in the prefixProps map.
@@ -5375,7 +4666,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 64 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(){
@@ -5408,12 +4699,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}()
 
 /***/ },
-/* 65 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var Region = __webpack_require__(16)
+	var Region = __webpack_require__(15)
 
 	/**
 	 * @static
@@ -5529,12 +4820,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 66 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var Region = __webpack_require__(16)
+	var Region = __webpack_require__(15)
 
 	/**
 	 *
@@ -5571,14 +4862,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 67 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var ALIGN_TO_NORMALIZED = __webpack_require__(68)
+	var ALIGN_TO_NORMALIZED = __webpack_require__(56)
 
-	var Region = __webpack_require__(16)
+	var Region = __webpack_require__(15)
 
 	/**
 	 * @localdoc Given source and target regions, and the given alignments required, returns a region that is the resulting allignment.
@@ -5652,12 +4943,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = COMPUTE_ALIGN_REGION
 
 /***/ },
-/* 68 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict'
 
-	var Region = __webpack_require__(16)
+	var Region = __webpack_require__(15)
 
 	/**
 	 *
