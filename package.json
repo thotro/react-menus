@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/radubrehar/react-menus"
+    "url": "https://github.com/zippyui/react-menus"
   },
   "keywords": [
     "menu",
@@ -30,9 +30,9 @@
   "author": "Radu Brehar",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/radubrehar/react-menus/issues"
+    "url": "https://github.com/zippyui/react-menus/issues"
   },
-  "homepage": "https://github.com/radubrehar/react-menus",
+  "homepage": "https://github.com/zippyui/react-menus",
   "devDependencies": {
     "css-loader": "^0.9.0",
     "extract-text-webpack-plugin": "^0.3.4",
