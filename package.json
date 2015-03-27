@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "React Menu Component",
   "main": "lib/index.js",
+  "contributors": [
+    "Radu Brehar <radu@evanghelic.ro>"
+  ],
   "scripts": {
     "test": "make",
     "lib": "./node_modules/.bin/gulp",
@@ -27,7 +30,7 @@
     "component",
     "react"
   ],
-  "author": "Radu Brehar",
+  "author": "ZippyUI <contact@zippyui.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zippyui/react-menus/issues"
