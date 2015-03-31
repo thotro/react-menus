@@ -1,10 +1,10 @@
 {
   "name": "react-menus",
   "version": "1.0.2",
-  "description": "React Menu Component",
+  "description": "A carefully crafted menu widget for React",
   "main": "lib/index.js",
+  "author": "ZippyUI <contact@zippyui.com>",
   "contributors": [
-    "Radu Brehar <radu@evanghelic.ro>"
   ],
   "scripts": {
     "test": "make",
@@ -30,7 +30,6 @@
     "component",
     "react"
   ],
-  "author": "ZippyUI <contact@zippyui.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zippyui/react-menus/issues"

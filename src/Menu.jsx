@@ -35,11 +35,14 @@ var MenuClass = React.createClass({
             constrainTo: true,
             enableScroll: true,
             interactionStyles: true,
+            applyDefaultTheme: true,
+
             defaultStyle: {
                 display  : 'inline-block',
                 boxSizing: 'border-box',
                 position : 'relative',
 
+                background: 'white',
                 //theme props
                 border: '1px solid rgb(46, 153, 235)'
             },
@@ -80,8 +83,14 @@ var MenuClass = React.createClass({
         }
     },
 
+    componentWillUnmount: function(){
+        this.didMount = false
+    },
+
     componentDidMount: function() {
         ;(this.props.onMount || emptyFn)(this)
+
+        this.didMount = true
 
         if ((this.props.constrainTo || this.props.alignTo) && !this.props.subMenu){
             setTimeout(function(){
@@ -89,6 +98,7 @@ var MenuClass = React.createClass({
                 if (!this.isMounted()){
                     return
                 }
+
                 var props = this.props
 
                 var scrollRegion = Region.from(this.refs.scrollContainer.getDOMNode())
@@ -171,7 +181,7 @@ var MenuClass = React.createClass({
 
         var children = props.children
 
-        if (props.items){
+        if (props.items && props.items.length){
             children = props.items.map(this.prepareItem.bind(this, props, state))
         }
 
@@ -195,7 +205,7 @@ var MenuClass = React.createClass({
 
         var style = assign({}, props.defaultStyle, subMenuStyle, props.style, props.subMenuStyle)
 
-        if (!props.visible){
+        if (!props.visible || (props.items && !props.items.length)){
             style.display = 'none'
         }
 
@@ -226,7 +236,7 @@ var MenuClass = React.createClass({
             assign(style, state.style)
         }
 
-        if (!this.isMounted() && (props.constrainTo || props.alignTo) && !props.subMenu){
+        if (!this.didMount && (props.constrainTo || props.alignTo) && !props.subMenu){
             //when a top menu is initially rendered (and should be constrained or has alignTo)
             //we show it hidden initially, so we can safely constrain and/or align it
             style.visibility = 'hidden'
@@ -384,7 +394,7 @@ var MenuClass = React.createClass({
      */
     onMenuItemMouseOver: function(itemProps, menuOffset, entryPoint) {
 
-        if (!this.isMounted()){
+        if (!this.didMount){
             return
         }
 
@@ -406,7 +416,7 @@ var MenuClass = React.createClass({
     },
 
     setupCheck: function(offset){
-        if (!this.isMounted()){
+        if (!this.didMount){
             return
         }
 
@@ -489,7 +499,7 @@ var MenuClass = React.createClass({
 
         this.removeMouseMoveListener()
 
-        if (!this.isMounted()){
+        if (!this.didMount){
             return
         }
 
@@ -520,7 +530,7 @@ var MenuClass = React.createClass({
 
         this.props.stopClickPropagation && event.stopPropagation()
 
-        if (hasTouch && event && event.nativeEvent && event.nativeEvent.expanderClick){
+        if (hasTouch && props && event && event.nativeEvent && event.nativeEvent.expanderClick){
 
             var offset = {
                 x: event.pageX,
@@ -534,10 +544,23 @@ var MenuClass = React.createClass({
         }
 
         if (!stopped){
-            ;(this.props.onClick || emptyFn)(event, props, index)
+            if (props){
+                ;(this.props.onClick || emptyFn)(event, props, index)
+            }
+
+            this.onChildClick(event, props)
+        }
+    },
+
+    onChildClick: function(event, props) {
+        ;(this.props.onChildClick || emptyFn)(event, props)
+
+        if (this.props.parentMenu){
+            this.props.parentMenu.onChildClick(event, props)
         }
     }
 })
 
-MenuClass.theme = MenuItem.theme
+MenuClass.themes = require('./MenuItem/themes')
+
 module.exports = MenuClass

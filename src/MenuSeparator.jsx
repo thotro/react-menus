@@ -5,23 +5,20 @@ var assign = require('object-assign')
 
 var emptyFn = function(){}
 
-module.exports = React.createClass({
+var MenuSeparator = React.createClass({
 
     displayName: 'ReactMenuSeparator',
 
     getDefaultProps: function() {
         return {
-            defaultStyle: {
-                cursor: 'auto'
-            },
-            border: '1px solid gray'
+            size: 1
         }
     },
 
     render: function() {
         var props = this.prepareProps(this.props)
 
-        return <tr {...props}><td colSpan={10}></td></tr>
+        return <tr {...props}><td colSpan={10} style={{padding: 0}}></td></tr>
     },
 
     prepareProps: function(thisProps) {
@@ -46,10 +43,24 @@ module.exports = React.createClass({
     prepareStyle: function(props) {
         var style = {}
 
-        assign(style, props.defaultStyle, {
-            borderTop: props.border
-        }, props.style)
+        assign(style,
+            MenuSeparator.defaultStyle,
+            MenuSeparator.style,
+            {
+                height: MenuSeparator.size || props.size
+            },
+            props.style
+        )
 
         return style
     }
 })
+
+MenuSeparator.defaultStyle = {
+    cursor    : 'auto',
+    background: 'gray'
+}
+
+MenuSeparator.style = {}
+
+module.exports = MenuSeparator

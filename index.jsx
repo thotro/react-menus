@@ -14,8 +14,9 @@ for (; i< len; i++){
     items.push({
         label: 'item ' + (i + 1),
         // disabled: true,
-        onClick: function(i){
-            debugger
+        onClick: function(e, obj, index){
+            console.log('clicked', index);
+            // debugger
         },
         fn: function(){
             // debugger
@@ -118,12 +119,26 @@ var App = React.createClass({
             </Menu.Item>
         </Menu>
 
+        var t = {
+            xdefault: {
+                style: {
+                    color: 'blue'
+                },
+                overStyle: {
+                    color: 'red'
+                }
+            }
+        }
         return (
             <div>
-                <Menu onClick={this.handleClick} xmaxHeight={300} items={items} at={[100, 100]}/>
+                <Menu theme="xdefault" themes={t} onChildClick={this.handleChildClick} onClick={this.handleClick} xmaxHeight={300} items={items} at={[100, 100]}/>
             </div>
 
         )
+    },
+
+    handleChildClick: function() {
+        console.log('child clicked!')
     },
 
     handleClick: function(itemProps) {

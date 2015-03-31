@@ -67,7 +67,9 @@ module.exports = function(props, state) {
             expanded : expandedIndex == index,
             children : children,
             expander : props.expander,
+            applyDefaultTheme: props.applyDefaultTheme,
             theme    : props.theme,
+            themes   : props.themes || this.constructor.themes,
             onExpanderClick: this.onMenuItemExpanderClick,
             onClick  : function(event, props, index){
                 onClick.apply(null, arguments)

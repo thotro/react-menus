@@ -1,13 +1,25 @@
 react-menus
 ===========
 
-> React Menu Component
+> A carefully crafted menu for React
 
 ## Install
 
 ```sh
-$ npm install --save react-menus
+$ npm install react-menus --save
 ```
+
+## Description
+
+The `react-menus` component is a context-menu like widget for React. It features **smart positioning**, overflow **scrolling** on too many menu items and **smart submenu positioning**.
+
+## Changelog
+
+See [Changelog](./CHANGELOG.md)
+
+## Roadmap
+
+See [Roadmap](./ROADMAP.md)
 
 ## Usage
 
@@ -19,6 +31,7 @@ var items = [
             console.log('well, hello')
         }
     },
+    '-', //show separator
     {
         label: 'hi'
     },
@@ -35,10 +48,13 @@ function onClick(event, props, index){
 <Menu items={items} onClick={onClick}/>
 ```
 
+For rendering separators, just use a `'-'` in the items array.
+
 ## Properties
 
  * items: Object[]
- * onClick: Function(event, props, index) - Called on a click on any menu item
+ * onClick: Function(event, props, index) - Called on a click on a direct menu item. For clicks on menu items at any level of nesting, use `onChildClick`
+ * onChildClick: Function(event, props) - Called when a menu item at any level of nesting was clicked
  * columns: String[] - defaults to ['label']
 
 For every item in the items property, a row will be rendered, with all the columns specified in `props.columns`. Every column displays the value in item[&lt;column_name&gt;].
@@ -84,6 +100,20 @@ theme.goldenTheme = { overStyle: {background: 'yellow'}}
 <Menu theme='goldenTheme' />
 ```
 
+For styling menu separators, set the desired style properties on `Menu.Separator.style`
+
+```jsx
+var Menu = require('react-menus')
+
+var Separator = Menu.Separator
+
+Separator.style = {
+    background: 'red' //the color of the separator
+}
+
+Separator.size = 10 //will be 10 px in height
+```
+
 ### Style props
 
 Styling menu items overrides theme styles.
@@ -111,10 +141,6 @@ Of course you can turn off scrolling with `enableScroll: false`
 ### Smart submenus
 
 Showing and hiding submenus is implemented with a smart algorithm, as described [here](http://bjk5.com/post/44698559168/breaking-down-amazons-mega-dropdown). Also submenu positioning is made taking into account the available space. More documentation on this soon.
-
-## Changelog
-
-See [Changelog](./CHANGELOG.md)
 
 ## License
 
