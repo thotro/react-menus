@@ -4,8 +4,7 @@
   "description": "A carefully crafted menu widget for React",
   "main": "lib/index.js",
   "author": "ZippyUI <contact@zippyui.com>",
-  "contributors": [
-  ],
+  "contributors": [],
   "scripts": {
     "test": "make",
     "lib": "./node_modules/.bin/gulp",
@@ -58,7 +57,6 @@
     "react-clonewithprops": "^1.0.1",
     "react-event-names": "^1.0.0",
     "react-style-normalizer": "^1.2.0",
-    "region": "^2.1.2",
     "region-align": "^2.1.2",
     "select-parent": "^1.0.1"
   },

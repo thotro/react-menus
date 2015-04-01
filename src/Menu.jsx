@@ -4,7 +4,7 @@ function emptyFn(){}
 
 var React      = require('react')
 var assign     = require('object-assign')
-var Region     = require('region')
+var Region     = require('region-align')
 var inTriangle = require('point-in-triangle')
 var hasTouch = require('has-touch')
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var Region = require('region')
+var Region       = require('region-align')
 var selectParent = require('select-parent')
 
 module.exports = function(domNode){
