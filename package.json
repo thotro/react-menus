@@ -1,6 +1,6 @@
 {
   "name": "react-menus",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A carefully crafted menu widget for React",
   "main": "lib/index.js",
   "author": "ZippyUI <contact@zippyui.com>",
