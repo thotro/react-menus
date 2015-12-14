@@ -1,6 +1,6 @@
 {
   "name": "react-menus",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A carefully crafted menu widget for React",
   "main": "lib/index.js",
   "author": "ZippyUI <contact@zippyui.com>",
@@ -35,10 +35,16 @@
   },
   "homepage": "https://github.com/zippyui/react-menus",
   "devDependencies": {
+    "autoprefixer-loader": "^3.1.0",
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
     "css-loader": "^0.9.0",
     "extract-text-webpack-plugin": "^0.3.4",
     "file-loader": "^0.8.1",
     "gulp": "^3.8.11",
+    "gulp-babel": "^6.1.1",
     "gulp-react": "^3.0.0",
     "http-server": "^0.7.3",
     "jsx-loader": "^0.12.1",
@@ -54,13 +60,16 @@
     "has-touch": "^1.0.1",
     "object-assign": "^2.0.0",
     "point-in-triangle": "^1.0.1",
+    "react": "^0.14.3",
     "react-clonewithprops": "^1.0.1",
+    "react-dom": "^0.14.3",
     "react-event-names": "^1.0.0",
     "react-style-normalizer": "^1.2.0",
     "region-align": "^2.1.2",
     "select-parent": "^1.0.1"
   },
   "peerDependencies": {
-    "react": ">=0.12.0"
+    "react": ">=0.14.0",
+    "react-dom": ">=0.14.0"
   }
 }

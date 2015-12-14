@@ -4,6 +4,8 @@ var Region = require('region-align')
 var assign = require('object-assign')
 var align  = require('./align')
 
+import { findDOMNode } from 'react-dom'
+
 module.exports = function getPositionStyle(props, state){
     if (!state.menu || !this.didMount){
         this.prevMenuIndex = -1
@@ -40,7 +42,7 @@ module.exports = function getPositionStyle(props, state){
                 return
             }
 
-            var thisRegion = Region.from(this.getDOMNode())
+            var thisRegion = Region.from(findDOMNode(this))
             var menuItemRegion = Region.from({
                 left  : thisRegion.left,
                 top   : thisRegion.top + offset.top,
