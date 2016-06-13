@@ -565,4 +565,5 @@ var MenuClass = React.createClass({
 
 MenuClass.themes = require('./MenuItem/themes')
 
+export default MenuClass
 module.exports = MenuClass

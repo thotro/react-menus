@@ -1,0 +1,14 @@
+.react-menus {
+  box-sizing: border-box;
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;;
+  }
+}
+
+.react-menus__menu-item-cell {
+  padding: 5;
+  white-space: nowrap;
+}

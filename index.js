@@ -1,9 +1,8 @@
-'use strict';
-
-require('./index.styl')
+import React from 'react'
 import { render } from 'react-dom'
-var React = require('react')
-var Menu  = require('./src')
+
+import Menu from './src'
+import './index.scss'
 
 var items = []
 
@@ -36,7 +35,7 @@ var App = React.createClass({
     },
 
     render: function() {
-
+{/*
         <Menu cellStyle={{padding: 10 }} at={[100, 100]}>
             <Menu.Item onClick={this.handleItemClick}>
                 <Menu.Item.Cell>first</Menu.Item.Cell>
@@ -118,7 +117,7 @@ var App = React.createClass({
                 </Menu>
             </Menu.Item>
         </Menu>
-
+*/}
         var t = {
             xdefault: {
                 style: {
@@ -131,7 +130,11 @@ var App = React.createClass({
         }
         return (
             <div>
-                <Menu theme="xdefault" themes={t} onChildClick={this.handleChildClick} onClick={this.handleClick} xmaxHeight={300} items={items} at={[100, 100]}/>
+              <Menu
+                onChildClick={this.handleChildClick}
+                onClick={this.handleClick}
+                xmaxHeight={300} items={items} at={[100, 100]}
+              />
             </div>
 
         )

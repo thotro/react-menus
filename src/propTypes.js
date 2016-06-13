@@ -1,19 +1,13 @@
-'use strict';
+import { PropTypes } from 'react'
 
-var React = require('react')
+export default {
+  items: PropTypes.array,
+  columns: PropTypes.array,
+  onMount: PropTypes.func,
 
-module.exports = {
-    items      : React.PropTypes.array,
-    columns    : React.PropTypes.array,
-    onMount    : React.PropTypes.func,
+  rowActiveStyle: PropTypes.object,
+  rowOverStyle: PropTypes.object,
+  rowStyle: PropTypes.object,
 
-    defaultRowActiveStyle: React.PropTypes.object,
-    defaultRowOverStyle  : React.PropTypes.object,
-    defaultRowStyle      : React.PropTypes.object,
-
-    rowActiveStyle: React.PropTypes.object,
-    rowOverStyle  : React.PropTypes.object,
-    rowStyle      : React.PropTypes.object,
-
-    cellStyle  : React.PropTypes.object
+  cellStyle: PropTypes.object
 }

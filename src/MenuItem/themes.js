@@ -12,7 +12,7 @@ module.exports = {
         activeStyle: {
             // background: 'rgb(118, 181, 231)',
             //-6 lightness from overStyle
-            background: ' linear-gradient(to bottom, rgb(106,182,240) 0%,rgb(91,175,239) 50%,rgb(96,178,240) 100%)',
+            background: ' linear-gradent(to bottom, rgb(106,182,240) 0%,rgb(91,175,239) 50%,rgb(96,178,240) 100%)',
             color: 'white'
         },
         expandedStyle: {
