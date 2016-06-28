@@ -6,6 +6,9 @@ var MenuItemCell = require('../MenuItemCell')
 
 module.exports = function(props, column) {
     var style = assign({}, props.defaultCellStyle, props.cellStyle)
-
-    return <MenuItemCell style={style}>{props.data[column]}</MenuItemCell>
+    if(column === 'icon') {
+      return <MenuItemCell style={style} dangerouslySetInnerHTML={{__html: props.data[column]}} />
+    } else {
+      return <MenuItemCell style={style}>{props.data[column]}</MenuItemCell>
+    }
 }
