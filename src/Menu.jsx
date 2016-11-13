@@ -43,16 +43,21 @@ var MenuClass = React.createClass({
                 display  : 'inline-block',
                 boxSizing: 'border-box',
                 position : 'relative',
-
                 background: 'white',
-                //theme props
-                border: '1px solid rgb(46, 153, 235)'
+                fontFamily: '\'Open Sans\', sans-serif',
+                fontSize: '13px',
+                cursor: 'pointer',
+                color: '#000',
+                backgroundColor: '#fff',
+                border: 'none',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.5)',
+                paddingTop: '3px',
+                paddingBottom: '3px',
             },
             defaultSubMenuStyle: {
                 position: 'absolute'
             },
             subMenuStyle: null,
-
 
             scrollerProps: {},
 
