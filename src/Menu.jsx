@@ -53,6 +53,7 @@ var MenuClass = React.createClass({
                 boxShadow: '0 2px 5px rgba(0, 0, 0, 0.5)',
                 paddingTop: '3px',
                 paddingBottom: '3px',
+                textAlign: 'left',
             },
             defaultSubMenuStyle: {
                 position: 'absolute'
