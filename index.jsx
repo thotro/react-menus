@@ -12,6 +12,7 @@ var len = 10
 
 for (; i< len; i++){
     items.push({
+        icon: '<span>II</span>',
         label: 'item ' + (i + 1),
         // disabled: true,
         onClick: function(e, obj, index){
@@ -23,7 +24,8 @@ for (; i< len; i++){
         },
         items: [
             {
-                label: i
+                icon: '<span>OO</span>',
+                label: 'item ' + i
             }
         ]
     })
@@ -37,88 +39,6 @@ var App = React.createClass({
 
     render: function() {
 
-        <Menu cellStyle={{padding: 10 }} at={[100, 100]}>
-            <Menu.Item onClick={this.handleItemClick}>
-                <Menu.Item.Cell>first</Menu.Item.Cell>
-                <Menu>
-                    <Menu.Item onClick={this.handleItemClick}>
-                        <Menu.Item.Cell>first</Menu.Item.Cell>
-                    </Menu.Item>
-                </Menu>
-            </Menu.Item>
-
-            <Menu.Separator />
-            <Menu.Item onClick={this.handleItemClick} label={1}>
-                <Menu>
-                    <Menu.Item onClick={this.handleItemClick}>
-                        <Menu.Item.Cell>one</Menu.Item.Cell>
-                    </Menu.Item>
-                    <Menu.Item onClick={this.handleItemClick}>
-                        <Menu.Item.Cell>two</Menu.Item.Cell>
-
-                        <Menu>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>one</Menu.Item.Cell>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>two</Menu.Item.Cell>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu>
-                                    <Menu.Item onClick={this.handleItemClick}>
-                                        <Menu.Item.Cell>one</Menu.Item.Cell>
-                                    </Menu.Item>
-                                    <Menu.Item onClick={this.handleItemClick}>
-                                        <Menu.Item.Cell>two</Menu.Item.Cell>
-                                    </Menu.Item>
-                                    <Menu.Item onClick={this.handleItemClick}>
-                                        <Menu.Item.Cell>three</Menu.Item.Cell>
-                                    </Menu.Item>
-                                </Menu>
-                                <Menu.Item.Cell>three</Menu.Item.Cell>
-                            </Menu.Item>
-                        </Menu>
-                    </Menu.Item>
-                    <Menu.Item onClick={this.handleItemClick}>
-                        <Menu.Item.Cell>three</Menu.Item.Cell>
-
-                        <Menu>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>3. one</Menu.Item.Cell>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>3. two</Menu.Item.Cell>
-                            </Menu.Item>
-                            <Menu.Item onClick={this.handleItemClick}>
-                                <Menu.Item.Cell>3. three</Menu.Item.Cell>
-                            </Menu.Item>
-                        </Menu>
-                    </Menu.Item>
-                </Menu>
-
-                <Menu.Item.Cell>one</Menu.Item.Cell>
-                <Menu.Item.Cell>icon</Menu.Item.Cell>
-            </Menu.Item>
-
-            <Menu.Item onClick={this.handleItemClick} label={2}>
-                                        <Menu.Item.Cell>two</Menu.Item.Cell>
-                <Menu.Item.Cell>icon</Menu.Item.Cell>
-                <Menu>
-                    <Menu.Item onClick={this.handleItemClick}>
-                        <Menu.Item.Cell>first in submenu</Menu.Item.Cell>
-                    </Menu.Item>
-                </Menu>
-            </Menu.Item>
-            <Menu.Item label={3}>
-                <Menu.Item.Cell>three </Menu.Item.Cell>
-                <Menu>
-                    <Menu.Item>
-                        <Menu.Item.Cell>hello</Menu.Item.Cell>
-                    </Menu.Item>
-                </Menu>
-            </Menu.Item>
-        </Menu>
-
         var t = {
             xdefault: {
                 style: {
@@ -131,7 +51,8 @@ var App = React.createClass({
         }
         return (
             <div>
-                <Menu theme="xdefault" themes={t} onChildClick={this.handleChildClick} onClick={this.handleClick} xmaxHeight={300} items={items} at={[100, 100]}/>
+                <Menu theme="xdefault" themes={t} onChildClick={this.handleChildClick} onClick={this.handleClick} xmaxHeight={300} 
+                        items={items} columns={['icon', 'label']} at={[100, 100]}/>
             </div>
 
         )

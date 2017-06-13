@@ -62,7 +62,7 @@ var MenuClass = React.createClass({
 
             scrollerProps: {},
 
-            columns: ['label'],
+            columns: ['icon', 'label'],
             items  : null,
             visible: true,
 

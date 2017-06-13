@@ -55,6 +55,7 @@
     "arrow-style": "^1.1.1",
     "buffer-function": "^1.0.0",
     "has-touch": "^1.0.1",
+    "http-server": "^0.10.0",
     "object-assign": "^4.0.1",
     "point-in-triangle": "^1.0.1",
     "react": "^15.0.0-0",
