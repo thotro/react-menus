@@ -21,14 +21,16 @@ var MenuItemCell = React.createClass({
         var children = props.children
 
         if (props.expander){
-            children = props.expander === true? '›': props.expander
+            var expander = props.expander === true ? '&#10093;': props.expander
+            delete props.children
+            return (
+                <td {...props} dangerouslySetInnerHTML={{__html: expander}} />
+            )
+        } else {
+            return (
+                <td {...props} />
+            )
         }
-
-        return (
-            <td {...props}>
-                {children}
-            </td>
-        )
     },
 
     prepareProps: function(thisProps) {

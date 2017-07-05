@@ -41,7 +41,7 @@ var MenuItem = React.createClass({
                 boxSizing : 'border-box'
             },
 
-            expander: '›'
+            expander: '&#10093;'
         }
     },
 
