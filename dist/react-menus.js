@@ -25666,6 +25666,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	var React = __webpack_require__(182);
 	var assign = __webpack_require__(24);
 
@@ -25687,14 +25689,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var children = props.children;
 
 	        if (props.expander) {
-	            children = props.expander === true ? '›' : props.expander;
+	            var expander = props.expander === true ? '&#10093;' : props.expander;
+	            delete props.children;
+	            return React.createElement('td', _extends({}, props, { dangerouslySetInnerHTML: { __html: expander } }));
+	        } else {
+	            return React.createElement('td', props);
 	        }
-
-	        return React.createElement(
-	            'td',
-	            props,
-	            children
-	        );
 	    },
 
 	    prepareProps: function prepareProps(thisProps) {
@@ -25848,7 +25848,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                boxSizing: 'border-box'
 	            },
 
-	            expander: '›'
+	            expander: '&#10093;'
 	        };
 	    },
 
